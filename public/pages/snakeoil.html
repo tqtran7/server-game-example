@@ -1,0 +1,88 @@
+ Snake Oil :3
+
+<html>
+  <head>
+    <style>
+      ul { list-style-type: none; }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <label>Customer:</label>
+      <li id="Customer"></li>
+    </ul>
+    <ul>
+      <label>Hand:</label>
+      <li id="Hand"></li>
+    </ul>
+  </body>
+  <script>
+    let Hand=[""];
+    let Customer=[""];
+
+    let Person=["Mad Scientist", "Foodie", "Scientist", "Doctor", "A.I.", "Rock", "Dog", "Cat", "Lizard Man", "Artist", "Musician", "Murderer", "Soilder", "Explorer", "King", "Punk", "Princess", "World Record Holder", "Skeleton", "Slime", "Zombie", "Salesmen", "Bussinessman", "Hippie", "Angel", "Demon", "Hero", "Demon Lord", "Pasifist", "Ill Patient", "Temmo from League of Legends", "Ambassador", "Hit Man", "Legion of Ants", "Hivemind", "Destroyer", "Cthulu", "Eater of Worlds", "Comedian", "Tree Hugger", "Clown", "Dummy", "Mastermind Behind It All", "Lich", "God", "Dragon", "Cultist", "Wizard", "Santa", "Trick or Treater", "Elf", "Mermaid"];
+    let Descriptor=["Fearful", "Angry", "Crazy", "Charming", "Caring", "Spicy", "Warning", "Sweaty", "Cannabilistic", "Insane", "Dead", "All-Seeing", "Miricale", "Holy", "Demonic", "Sadistic", "Good", "Unreal", "Legendary", "Broken", "New", "Cheap", "Luxury", "Radical", "Powerful", "Arch", "Dancing", "Rushing", "Unusual", "Flawless", "Blood-Bound", "True", "Danger", "Doubted", "Doubtful", "Rare", "Rabid", "Wonderful", "Dragonic", "Bald", "Big Headed", "Unworldly", "Yummy", "Relaxing", "Cool", "Dumb", "Intellegent", "Diabolical", "Disease", "Posionous", "Lovely", "Basic", "Empty", "Thin", "Heavy", "Great", "Fat", "Cartoon"];
+    let Gadget=["Car","Slots", "Fishing Pole", "Gadget", "Suit", "Belt", "Gun", "Magic", "Building", "Washing Machine", "Salt", "Tunnel", "Helemet", "Turtle", "Snake", "Oil", "Sweater", "Boat", "Paper", "Water", "Chair", "Trap", "Base", "Space", "Ocean", "Lava", "Potion", "Fruit", "Apple", "Headphones", "Soda", "Castle", "Mask", "Noodle", "Hammer", "Flower", "Tie", "Sand", "Video", "Closet", "Comb", "Movie", "Slide", "Sled", "Nose", "Wings", "Nap", "Pill", "Moon", "Sun", "Pig", "Time", "Tummy", "Sword", "Switch", "Basket", "Crayon", "Hand", "Banana", "Spice", "Sauce", "Sweat", "War", "Cape", "Pad", "Kitten", "Family", "Human", "Plan", "Muscle", "Candle", "Boots", "Glove", "Smile", "Bone", "Flag", "Rope", "Ladder", "Nut", "Cliff", "Jar", "Beard", "Sugar", "Rush", "Dance", "Rocket", "Ice", "Ostrich", "Flood", "Goggles", "Magnet", "Magazine", "Skin", "Cloud", "Alarm", "Shark", "Doll", "Playground", "Comic", "Valentine", "Halloween", "Christmas", "Lock", "Pain", "Tooth", "Gold", "Silver", "Tree", "Balloon", "Road", "Trap", "Ring", "Brush", "Comb", "Hope", "Elevator", "News", "Crayon", "Wall", "Liquid", "Gas", "Blanket", "Heaven", "Hell", "Gate", "Finger", "Mirror", "Desire", "Barf", "Wheel", "Cave", "Money", "Crown", "Fur", "Prayer", "Burp", "Parrot", "Face", "Glitter", "Swing", "Sandwich", "Heart", "Puddle", "Bottle", "Tears", "Trumpet", "Lightning", "Bell", "Chalk", "Doubt", "Jelly", "Wish", "Lip", "Nail", "Hair", "Revenge", "Sea", "Pie", "Rubber", "Safety", "Animal", "Birthday", "Braclet", "Bomb", "Note", "Gum", "Camp", "Movie", "Energy"];
+
+    console.log(Person.length);
+    console.log(Descriptor.length);
+    console.log(Gadget.length);
+
+    function chooseCustomer() {
+      x=Math.floor(Math.random() * (Descriptor.length))
+      y=Math.floor(Math.random() * (Person.length))
+      Customer[0]=Descriptor[x]
+      Customer[1]=Person[y]
+      Descriptor.splice(x, 1);
+      Person.splice(y, 1);
+      console.log(Customer);
+    }
+
+    function dealCards() {
+      for (let h=0; h<2; h++) {
+        d=Math.floor(Math.random() * (Descriptor.length))
+        Hand[h]=Descriptor[d]
+        Descriptor.splice(d, 1);
+      }
+      for (let h=1; h<6; h++) {
+        g=Math.floor(Math.random()* (Gadget.length))
+        Hand[h]=Gadget[g]
+        Gadget.splice(g, 1);
+      }
+      for (let h=6; h<7; h++){
+        p=Math.floor(Math.random() * (Person.length))
+        Hand[h]=Person[p]
+        Person.splice(p, 1);
+      }
+      console.log(Hand);
+    }
+
+    function generateCards() {
+      let shownHand = document.getElementById('Hand');
+      shownHand.innerHTML = '';
+      for (let n = 0; n < Hand.length; n++) {
+        console.log(n, Hand[n]);
+        let listItem = document.createElement('li');
+        listItem.innerHTML = Hand[n];
+        shownHand.appendChild(listItem);
+      }
+    }
+
+    function generateCustomer() {
+      let shownCustomer = document.getElementById('Customer');
+      shownCustomer.innerHTML = '';
+      for (let n = 0; n < Customer.length; n++) {
+        console.log(n, Customer[n]);
+        let listItem = document.createElement('li');
+        listItem.innerHTML = Customer[n];
+        shownCustomer.appendChild(listItem);
+      }
+    }
+
+    chooseCustomer()
+    dealCards()
+    generateCards()
+    generateCustomer()
+
+  </script>
+</html>

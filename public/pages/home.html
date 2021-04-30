@@ -4,11 +4,21 @@
   <head>
     <script src="/scripts/jquery-3.6.0.min.js"></script>
   </head>
-
+  <style>
+    #loginScreen {
+      display: grid;
+    }
+  </style>
   <body>
-    <p>Hello <p id="user">world<p></p>
-    <button onclick="getUser()">Get User</button>
-    <img id="userIcon" src="images/bomb.png" height="50px" width="50px">
+    <div id="loginScreen">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name">
+      <label for="room">Room</label>
+      <input type="text" name="room" id="room">
+      <button onclick="joinGame()">Join</button>
+      <button onclick="createGame()">Create</button>
+      <p id="errormessage"></p>
+    </div>
   </body>
   <script src="/scripts/home.js"></script>
 </html>

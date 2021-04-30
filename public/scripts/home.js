@@ -1,20 +1,32 @@
 
-let user = 'Willy and Darin';
-let userElement = document.getElementById('user');
-let userIcon = document.getElementById('userIcon');
-
-function greetings() {
-  userElement.innerHTML = user;
-}
-
-// Make an AJAX call to the server to get a name
-// Remember that AJAX only works on the SAME domain
-function getUser() {
-  $.get('/user', function(data) {
-    console.log(data);
-    userElement.innerHTML = data.name;
-    userIcon.src = `images/${data.icon}.png`;
+function createGame() {
+  let user = $("#name").val();
+  $.ajax({
+    type: "POST",
+    url: "/game/create",
+    data: { user: user },
+    json: true,
+    success: function(roomcode) {
+      console.log(roomcode);
+      window.location = '/game';
+    }
   });
 }
 
-greetings();
+function joinGame() {
+  let roomcode = $('#room').val();
+  let user = $("#name").val();
+  $.ajax({
+    type: "POST",
+    url: `/room/${roomcode}/join`,
+    data: { user: user },
+    json: true,
+    success: function(roomcode) {
+      window.location = '/game';
+    },
+    error: function(error) {
+      console.log(error);
+      $('#errormessage').html(error);
+    }
+  });
+}
