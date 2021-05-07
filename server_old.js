@@ -82,6 +82,7 @@ app.get('/game/start', (req, res) => {
 app.get('/game/cards', (req, res) => {
   let roomcode = req.session.room;
   let user = req.session.user;
+  console.log(`${user} is requesting for cards!`);
   let game = games[roomcode].game;
   if (game) { res.send(game[user].cards); }
   else { res.status(400).send('Game not found!'); }

@@ -1,32 +1,23 @@
 
-function createGame() {
-  let user = $("#name").val();
-  $.ajax({
-    type: "POST",
-    url: "/game/create",
-    data: { user: user },
-    json: true,
-    success: function(roomcode) {
-      console.log(roomcode);
+const socket = io();
+
+function createRoom() {
+  let username = $("#name").val();
+  socket.emit('OnRoomCreate', username, (res) => {
+    if (res.sessionId) {
+      localStorage.setItem('sessionId', res.sessionId);
       window.location = '/game';
     }
   });
 }
 
-function joinGame() {
-  let roomcode = $('#room').val();
-  let user = $("#name").val();
-  $.ajax({
-    type: "POST",
-    url: `/room/${roomcode}/join`,
-    data: { user: user },
-    json: true,
-    success: function(roomcode) {
+function joinRoom() {
+  let username = $("#name").val();
+  let roomcode = $("#room").val();
+  socket.emit('OnRoomJoinRequest', username, roomcode, (res) => {
+    if (res.sessionId) {
+      localStorage.setItem('sessionId', res.sessionId);
       window.location = '/game';
-    },
-    error: function(error) {
-      console.log(error);
-      $('#errormessage').html(error);
     }
   });
 }
