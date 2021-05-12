@@ -92,10 +92,13 @@ snakeoil.on('connection', async(socket) => {
   // User exits a room
   socket.on("OnRoomExit", (username, callback) => {
     try {
+      console.log("OnRoomExit called!");
       let roomcode = session.user.room;
       let room = rooms[roomcode];
       let index = room.users.indexOf(username);
       room.users.splice(index, 1);
+      socket.join(roomcode);
+      console.log("About to call OnUsersEnterOrExit");
       socket.emit('OnUsersEnterOrExit', room.users);
       callback({ status: 'ok' });
     }
@@ -104,7 +107,21 @@ snakeoil.on('connection', async(socket) => {
     }
   });
 
-
+  socket.on('disconnect', function () {
+    try {
+      console.log("OnRoomExit called!");
+      let roomcode = session.user.room;
+      let room = rooms[roomcode];
+      let index = room.users.indexOf(username);
+      room.users.splice(index, 1);
+      console.log(room.users);
+      socket.join(roomcode);
+      socket.emit('OnUsersEnterOrExit', room.users);
+    }
+    catch(e) {
+      console.log(e);
+    }
+  });
 });
 
 server.listen(3000, ()=> {

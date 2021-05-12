@@ -1,88 +1,112 @@
- Snake Oil :3
-
+<!doctype html>
 <html>
   <head>
-    <style>
-      ul { list-style-type: none; }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <title>Snake Oil Login Screen</title>
+    <script src="/scripts/jquery-3.6.0.min.js"></script>
   </head>
+  <style>
+
+    body {
+      background: #575f70;
+    }
+
+    .container {
+      width: 30%;
+      background: #f0eded;
+      padding: 2em;
+      margin-top: 10em;
+    }
+
+    ul {
+      list-style-type: none;
+      font-size: small;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Split the screen in half */
+    .split {
+      height: 100%;
+      width: 50%;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
+
+    /* Control the left side */
+    .left {
+      left: 0;
+      width: 20%;
+      padding: 1em;
+      background-color: white;
+    }
+
+    /* Control the right side */
+    .right {
+      right: 0;
+      width: 80%;
+      background-color: #575f70;
+      color: white;
+      padding: 1em;
+    }
+
+    #cards {
+      padding: 1em;
+    }
+
+  </style>
   <body>
-    <ul>
-      <label>Customer:</label>
-      <li id="Customer"></li>
-    </ul>
-    <ul>
-      <label>Hand:</label>
-      <li id="Hand"></li>
-    </ul>
+    <div id="testscreen">
+      <h1>Choose an action.</h1>
+      <button id="login" type="button" title="Simulate login">
+        Simulate login
+      </button>
+      <button id="logout" type="button" title="Simulate logout">
+        Simulate logout
+      </button>
+      <button id="wsButton" type="button" title="Open WebSocket connection">
+        Open WebSocket connection
+      </button>
+      <button id="wsSendButton" type="button" title="Send WebSocket message">
+        Send WebSocket message
+      </button>
+      <pre id="messages" style="height: 400px; overflow: scroll"></pre>
+      <script src="app.js"></script>
+    </div>
+    <div id="loginscreen" class="container" style="display:none;">
+        <div class="mb-3">
+          <label for="name" class="form-label">User Name</label>
+          <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
+          <div id="nameHelp" class="form-text">A unique user name that represents you.</div>
+        </div>
+        <div class="mb-3">
+          <label for="room" class="form-label">Room Code</label>
+          <input type="text" class="form-control" id="room">
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="createRoom()">Create Room</button>
+        <button type="submit" class="btn btn-secondary" onclick="joinRoom()">Join Room</button>
+    </div>
+    <div id="gamescreen" style="display:none;">
+      <div class="split left">
+        <label id="gameroom"></label>
+        <ul class="list-group list-group-flush" id="users"></ul>
+      </div>
+      <div class="split right">
+        <label id="username"></label>
+        <button type="button" class="btn btn-primary position-absolute top-0 end-0"
+          style="margin:1em;"
+          id="startbtn" onclick="startGame()">Start Game</button>
+        <button type="button" class="btn btn-secondary position-absolute top-0 end-0"
+          style="margin:1em;"
+          id="exitbtn" onclick="exitRoom()">Exit Room</button>
+        <ul id="cards"></ul>
+      </div>
+    </div>
   </body>
-  <script>
-    let Hand=[""];
-    let Customer=[""];
-
-    let Person=["Mad Scientist", "Foodie", "Scientist", "Doctor", "A.I.", "Rock", "Dog", "Cat", "Lizard Man", "Artist", "Musician", "Murderer", "Soilder", "Explorer", "King", "Punk", "Princess", "World Record Holder", "Skeleton", "Slime", "Zombie", "Salesmen", "Bussinessman", "Hippie", "Angel", "Demon", "Hero", "Demon Lord", "Pasifist", "Ill Patient", "Temmo from League of Legends", "Ambassador", "Hit Man", "Legion of Ants", "Hivemind", "Destroyer", "Cthulu", "Eater of Worlds", "Comedian", "Tree Hugger", "Clown", "Dummy", "Mastermind Behind It All", "Lich", "God", "Dragon", "Cultist", "Wizard", "Santa", "Trick or Treater", "Elf", "Mermaid"];
-    let Descriptor=["Fearful", "Angry", "Crazy", "Charming", "Caring", "Spicy", "Warning", "Sweaty", "Cannabilistic", "Insane", "Dead", "All-Seeing", "Miricale", "Holy", "Demonic", "Sadistic", "Good", "Unreal", "Legendary", "Broken", "New", "Cheap", "Luxury", "Radical", "Powerful", "Arch", "Dancing", "Rushing", "Unusual", "Flawless", "Blood-Bound", "True", "Danger", "Doubted", "Doubtful", "Rare", "Rabid", "Wonderful", "Dragonic", "Bald", "Big Headed", "Unworldly", "Yummy", "Relaxing", "Cool", "Dumb", "Intellegent", "Diabolical", "Disease", "Posionous", "Lovely", "Basic", "Empty", "Thin", "Heavy", "Great", "Fat", "Cartoon"];
-    let Gadget=["Car","Slots", "Fishing Pole", "Gadget", "Suit", "Belt", "Gun", "Magic", "Building", "Washing Machine", "Salt", "Tunnel", "Helemet", "Turtle", "Snake", "Oil", "Sweater", "Boat", "Paper", "Water", "Chair", "Trap", "Base", "Space", "Ocean", "Lava", "Potion", "Fruit", "Apple", "Headphones", "Soda", "Castle", "Mask", "Noodle", "Hammer", "Flower", "Tie", "Sand", "Video", "Closet", "Comb", "Movie", "Slide", "Sled", "Nose", "Wings", "Nap", "Pill", "Moon", "Sun", "Pig", "Time", "Tummy", "Sword", "Switch", "Basket", "Crayon", "Hand", "Banana", "Spice", "Sauce", "Sweat", "War", "Cape", "Pad", "Kitten", "Family", "Human", "Plan", "Muscle", "Candle", "Boots", "Glove", "Smile", "Bone", "Flag", "Rope", "Ladder", "Nut", "Cliff", "Jar", "Beard", "Sugar", "Rush", "Dance", "Rocket", "Ice", "Ostrich", "Flood", "Goggles", "Magnet", "Magazine", "Skin", "Cloud", "Alarm", "Shark", "Doll", "Playground", "Comic", "Valentine", "Halloween", "Christmas", "Lock", "Pain", "Tooth", "Gold", "Silver", "Tree", "Balloon", "Road", "Trap", "Ring", "Brush", "Comb", "Hope", "Elevator", "News", "Crayon", "Wall", "Liquid", "Gas", "Blanket", "Heaven", "Hell", "Gate", "Finger", "Mirror", "Desire", "Barf", "Wheel", "Cave", "Money", "Crown", "Fur", "Prayer", "Burp", "Parrot", "Face", "Glitter", "Swing", "Sandwich", "Heart", "Puddle", "Bottle", "Tears", "Trumpet", "Lightning", "Bell", "Chalk", "Doubt", "Jelly", "Wish", "Lip", "Nail", "Hair", "Revenge", "Sea", "Pie", "Rubber", "Safety", "Animal", "Birthday", "Braclet", "Bomb", "Note", "Gum", "Camp", "Movie", "Energy"];
-
-    console.log(Person.length);
-    console.log(Descriptor.length);
-    console.log(Gadget.length);
-
-    function chooseCustomer() {
-      x=Math.floor(Math.random() * (Descriptor.length))
-      y=Math.floor(Math.random() * (Person.length))
-      Customer[0]=Descriptor[x]
-      Customer[1]=Person[y]
-      Descriptor.splice(x, 1);
-      Person.splice(y, 1);
-      console.log(Customer);
-    }
-
-    function dealCards() {
-      for (let h=0; h<2; h++) {
-        d=Math.floor(Math.random() * (Descriptor.length))
-        Hand[h]=Descriptor[d]
-        Descriptor.splice(d, 1);
-      }
-      for (let h=1; h<6; h++) {
-        g=Math.floor(Math.random()* (Gadget.length))
-        Hand[h]=Gadget[g]
-        Gadget.splice(g, 1);
-      }
-      for (let h=6; h<7; h++){
-        p=Math.floor(Math.random() * (Person.length))
-        Hand[h]=Person[p]
-        Person.splice(p, 1);
-      }
-      console.log(Hand);
-    }
-
-    function generateCards() {
-      let shownHand = document.getElementById('Hand');
-      shownHand.innerHTML = '';
-      for (let n = 0; n < Hand.length; n++) {
-        console.log(n, Hand[n]);
-        let listItem = document.createElement('li');
-        listItem.innerHTML = Hand[n];
-        shownHand.appendChild(listItem);
-      }
-    }
-
-    function generateCustomer() {
-      let shownCustomer = document.getElementById('Customer');
-      shownCustomer.innerHTML = '';
-      for (let n = 0; n < Customer.length; n++) {
-        console.log(n, Customer[n]);
-        let listItem = document.createElement('li');
-        listItem.innerHTML = Customer[n];
-        shownCustomer.appendChild(listItem);
-      }
-    }
-
-    chooseCustomer()
-    dealCards()
-    generateCards()
-    generateCustomer()
-
-  </script>
+  <script src="/scripts/snakeoil.js"></script>
 </html>
