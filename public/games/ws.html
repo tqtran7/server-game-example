@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+      <link rel="stylesheet" href="/css/ws.css">
+      <title>Game</title>
+  </head>
+  <body>
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+      <div class="container-fluid">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon1">@</span>
+          <input type="text" class="form-control" id="username" placeholder="Username">
+          <span class="input-group-text" id="basic-addon1">#</span>
+          <input type="text" class="form-control" id="roomcode" placeholder="Roomcode">
+          <button type="submit" class="btn btn-primary" id="createbtn">Create</button>
+          <button type="submit" class="btn btn-secondary" id="joinbtn">Join</button>
+        </div>
+      </div>
+    </nav>
+    <div class="verticle-divider" style="left:220px;"></div>
+    <div class="container-fluid">
+      <div class="input-group">
+        <button id="login" class="btn btn-primary">Simulate login</button>
+        <button id="logout" class="btn btn-secondary">Simulate logout</button>
+        <button id="wsButton" class="btn btn-secondary">Open WebSocket connection</button>
+        <button id="wsSendButton" class="btn btn-secondary">Send WebSocket message</button>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <ul id="userlist">
+        <li>Morisette Amon</li>
+        <li class="active">Mariah Carey</li>
+        <li>Whitney Houston</li>
+        <li>Celine Dion</li>
+      </ul>
+      <pre id="messages" data-simplebar></pre>
+    </div>
+    <nav class="navbar fixed-bottom navbar-dark bg-dark">
+      <div class="container-fluid">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon1">Chat</span>
+          <input type="text" class="form-control" id="messagebox">
+          <button id="msgsendbtn" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+    </nav>
+  </body>
+  <script src="/scripts/jquery-3.6.0.min.js"></script>
+  <script src="/scripts/ws.js"></script>
+</html>

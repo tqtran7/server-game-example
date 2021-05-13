@@ -1,0 +1,43 @@
+
+body { 
+  background-color: #202020; 
+  padding-top: 4em; 
+  color: #c5c5c5; 
+}
+
+#userlist {     
+  color: #929292;
+  position: fixed;
+  float: left;
+  list-style-type: none;
+  height: 100%;
+  width: 200px; 
+}
+
+#userlist .active {
+  color: white;
+}
+
+.verticle-divider {
+  border-left: 1px solid #727272;
+  height: 100%;
+  position: fixed;
+}
+
+#messages { 
+  margin-left: 220px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Scroll bar*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #616161;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bdbdbd;
+}
