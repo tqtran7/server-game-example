@@ -22,6 +22,20 @@ app.use(routers);
 const port = 80;
 const server = http.createServer(app);
 server.on('upgrade', socket.upgrade(sessionParser));
+// server.on('upgrade', function(request, socket, head) {
+//   console.log('Parsing session from request...');
+//   sessionParser(request, {}, () => {
+//     if (!request.session.scope.id) {
+//       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+//       socket.destroy();
+//       return;
+//     }
+//     console.log('Session is parsed!');
+//     wss.handleUpgrade(request, socket, head, function (ws) {
+//       wss.emit('connection', ws, request);
+//     });
+//   });
+// });
 server.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
