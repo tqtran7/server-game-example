@@ -2,7 +2,23 @@
 body { 
   background-color: #202020; 
   padding-top: 4em; 
-  color: #c5c5c5; 
+  color: #c5c5c5;
+}
+
+.game-container {
+  top: 54px;
+  height: 400px;
+  position: fixed;
+  background: #424242;
+  z-index: 100;
+}
+
+.room-container {
+  height: 50%;
+  /* top: 400px; */
+  margin-top: 410px;
+  /* position: fixed; */
+  z-index: 0;
 }
 
 #userlist {     
@@ -16,6 +32,11 @@ body {
 
 #userlist .active {
   color: white;
+}
+
+#userlist .username {
+  position: absolute;
+  left: 60px;
 }
 
 .verticle-divider {

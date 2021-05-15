@@ -37,10 +37,20 @@
 
   function updateUserList(data) {
     $('#userlist').empty();
-    $('#userlist').append(`<li class="active">${data.host}</li>`);
+    $('#userlist').append(`
+      <li class="active">
+        <i class="fas fa-user-cog"></i>
+        <span class="username">${data.host}</span>
+      </li>
+    `);
     for (let username of data.users) {
       if (username !== data.host) {
-        $('#userlist').append(`<li>${username}</li>`);
+        $('#userlist').append(`
+          <li>
+            <i class="fas fa-user"></i>
+            <span class="username">${username}</span>
+          </li>
+        `);
       }
     }
   }
@@ -85,24 +95,6 @@
       }
     });
   });
-
-  login.onclick = function () {
-    fetch('/login', { method: 'POST', credentials: 'same-origin' })
-      .then(handleResponse)
-      .then(showMessage)
-      .catch(function (err) {
-        showMessage(err.message);
-      });
-  };
-
-  logout.onclick = function () {
-    fetch('/logout', { method: 'DELETE', credentials: 'same-origin' })
-      .then(handleResponse)
-      .then(showMessage)
-      .catch(function (err) {
-        showMessage(err.message);
-      });
-  };
 
   let ws;
   function connectWebsocket() {

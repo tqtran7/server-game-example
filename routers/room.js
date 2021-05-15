@@ -138,8 +138,9 @@ function promote(req, res) {
 }
 
 /**
- * This is an intentional action.
- * When user leaves, we get rid of their session and socket.
+ * When a user leaves the room.
+ * Get rid of their session and socket.
+ * If user is a host, promote another user to host.
  * @param {} req 
  * @param {*} res
  */
@@ -147,26 +148,33 @@ function leave(req, res) {
   try {
 
     // user has a valid session
-    // if user is host, reassign host to someone else
     if (req.session.scope) {
-      let sid = request.session.scope.id;
-      let roomcode = request.session.scope.roomcode;
-      let users = rooms[roomcode].users;
-      let isHost = request.session.scope.isHost;
-      if (isHost && users.length > 1) {
-        let rand = Math.floor(Math.random() * users.length);
-        let user = users[rand];
-        // need a way to grab the session
+      let sid = req.session.scope.id;
+      let username = req.session.scope.username;
+      let roomcode = req.session.scope.roomcode;
+      let room = rooms[roomcode];
+      if (room) {
+
+        // if user is host, reassign host to someone else
+        let isHost = room.host === username;
+        if (isHost && room.users.length > 1) {
+          let rand = Math.floor(Math.random() * room.users.length);
+          let newHost = room.users[rand];
+          room.host = newHost;
+        }
+
+        // remove user from room
+        let index = room.users.indexOf(username);
+        if (index >= 0) { room.users.splice(index, 1); }
+        socket.broadcastToRoom('OnUsersJoined', roomcode, room);
       }
 
-      request.session.destroy(() => {
+      req.session.destroy(() => {
         socket.close(sid);
-        res.send({ status: 'ok' });
       });
     }
 
-    // user does not have a session
-    else { res.send({ status: 'ok' }); }
+    res.send({ status: 'ok' });
   }
   catch (e) {
     console.log(e);
