@@ -1,10 +1,7 @@
 
-const assert = require('assert');
 const express = require('express');
 const router = express.Router();
-const uuid = require('uuid');
-const crypto = require('crypto');
-const socket = require('../middlewares/socket');
+const Room = require('../models/room');
 
 ///////////////////////////////
 
@@ -13,9 +10,20 @@ router.post('/join', join);
 router.post('/leave', leave);
 
 let rooms = new Map();
-module.exports = router;
+module.exports = {
+  router: router,
+  getRoom: getRoom,
+};
+
+const socket = require('../middlewares/socket');
 
 ///////////////////////////////
+
+function getRoom(roomcode) {
+  if (rooms.has(roomcode)) {
+    return rooms.get(roomcode);
+  }
+}
 
 /**
  * User creates a room and becomes host.
@@ -24,32 +32,14 @@ module.exports = router;
  */
 function create(req, res) {
   try {
-
-    console.log('Room create:', req.body);
     let username = req.body.username;
-    assert(username);
-
-    // Create scope for new session
-    if (!req.session.scope) {
-      req.session.scope = {};
-      req.session.scope.id = uuid.v4();
-    }
-
-    // Generate new room code
-    let roomcode = crypto.randomBytes(2).toString('hex');
-    req.session.scope.username = username;
-    req.session.scope.roomcode = roomcode;
-
-    // Save users to room
-    let room = { 
-      roomcode: roomcode,
-      host: username,
-      users: [username], 
-    };
-    rooms.set(roomcode, room);
-    console.log(req.session.scope);
-    console.log(room);
-    res.send(room);
+    let room = new Room(username);
+    if (!req.session.scope) { req.session.scope = {}; }
+    req.session.scope.id  = room.getUser(username).getId();
+    req.session.scope.username  = username;
+    req.session.scope.roomcode  = room.getRoomCode();
+    rooms.set(room.getRoomCode(), room);
+    res.send(room.toString());
   }
   catch (e) {
     console.log(e);
@@ -63,70 +53,20 @@ function create(req, res) {
  */
 function join(req, res) {
   try {
-
-    console.log('Room joined:', req.body);
     let username = req.body.username;
     let roomcode = req.body.roomcode;
-    assert(username);
-    assert(roomcode);
-
-    // Create scope for new session
-    if (!req.session.scope) {
-      req.session.scope = {};
-      req.session.scope.id = uuid.v4();
-    }
-
-    // Check that room exists and
     if (rooms.has(roomcode)) {
-      
-      req.session.scope.username = username;
-      req.session.scope.roomcode = roomcode;
-
-      // Add only new users to room
       let room = rooms.get(roomcode);
-      let users = room.users;
-      if (!users.includes(username)) { 
-        users.push(username); 
-      }
-      console.log(req.session.scope);
-      console.log(room);
-      socket.broadcastToRoom('OnUsersJoined', roomcode, room);
-      res.send(room);
-    }
-    else {
-      res.status(400).send({ message: 'Room does not exist!' });
-    }
-  }
-  catch (e) {
-    console.log(e);
-  }
-}
-
-/**
- * Promotes another user in the room to host.
- * Only a host can do this.
- * @param {} req 
- * @param {*} res 
- */
-function promote(req, res) {
-  try {
-    if (req.session.scope && req.session.scope.isHost) {
-
-      let user = req.body.promote;
-      let roomcode = request.session.scope.roomcode;
-      let users = rooms[roomcode].users;
-      if (users.includes(user)) {
-
-      }
-      
-      // Check that room exists and
-      // Add only new users to room
-      if (rooms.has(roomcode)) {
-        let users = rooms.get(roomcode).users;
-        if (!users.includes(username)) { users.push(username); }
-        console.log(req.session.scope);
-        res.send(req.session.scope);
-      }
+      room.addUser(username);
+      if (!req.session.scope) { req.session.scope = {}; }
+      req.session.scope.id  = room.getUser(username).getId();
+      req.session.scope.username = username;
+      req.session.scope.roomcode = room.getRoomCode();
+      socket.broadcast(
+        'OnUsersUpdate', 
+        room.getUserIds(), 
+        room.toString());
+      res.send(room.toString());
     }
     else {
       res.status(400).send({ message: 'Room does not exist!' });
@@ -149,28 +89,31 @@ function leave(req, res) {
 
     // user has a valid session
     if (req.session.scope) {
-      let sid = req.session.scope.id;
+
       let username = req.session.scope.username;
       let roomcode = req.session.scope.roomcode;
-      let room = rooms[roomcode];
-      if (room) {
+      if (rooms.has(roomcode)) {
 
-        // if user is host, reassign host to someone else
-        let isHost = room.host === username;
-        if (isHost && room.users.length > 1) {
-          let rand = Math.floor(Math.random() * room.users.length);
-          let newHost = room.users[rand];
-          room.host = newHost;
+        let room = rooms.get(roomcode);
+
+        // if user is host, reassign host to next user
+        let isHost = room.host.name === username;
+        let usernames = room.users.keys();
+        if (isHost && usernames.length > 1) {
+          let nextuser = usernames[1];
+          room.host = room.users.get(nextuser);
         }
 
         // remove user from room
-        let index = room.users.indexOf(username);
-        if (index >= 0) { room.users.splice(index, 1); }
-        socket.broadcastToRoom('OnUsersJoined', roomcode, room);
+        room.users.delete(username);
+        socket.broadcast(
+          'OnUsersUpdate', 
+          room.getUserIds(), 
+          room.toString());
       }
 
       req.session.destroy(() => {
-        socket.close(sid);
+        socket.close(req.session.scope.id);
       });
     }
 

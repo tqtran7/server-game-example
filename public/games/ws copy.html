@@ -10,7 +10,7 @@
       <title>Game</title>
   </head>
   <body>
-    <!-- <nav class="navbar fixed-top navbar-dark bg-dark">
+    <nav class="navbar fixed-top navbar-dark bg-dark">
       <div class="container-fluid">
         <div class="input-group">
           <span class="input-group-text darkspan" id="basic-addon1">@</span>
@@ -21,86 +21,16 @@
           <button type="submit" class="btn btn-secondary" id="joinbtn">Join</button>
         </div>
       </div>
-    </nav> -->
-    <div class="chatbox">
-      <div class="top-bar">
-        <div class="avatar"><p>W</p></div>
-        <div class="name">Willy Pilly</div>
-        <div class="icons">
-          <i class="fas fa-phone"></i>
-          <i class="fas fa-video"></i>
-          <i class="fas fa-times-circle"></i>
-        </div>
-      </div>
-      <div class="middle" id="messages">
-        <div class="voldemort">
-          <div class="incoming">
-            <div class="bubble">Hey, Father's Day is coming up..</div>
-            <div class="bubble">What are you getting.. Oh, oops sorry dude.</div>
-          </div>
-          <div class="outgoing">
-            <div class="bubble lower">Nah, it's cool.</div>
-            <div class="bubble">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
-          </div>
-          <div class="typing">
-            <div class="bubble">
-              <div class="ellipsis one"></div>
-              <div class="ellipsis two"></div>
-              <div class="ellipsis three"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bottom-bar chat">
-        <!-- <div class="chat"></div> -->
-          <input type="text" placeholder="Type a message..." />
-          <button type="submit"><i class="fas fa-paper-plane"></i></button>
-      </div>
-    </div>
-    <div class="container">
-      <div class="profile">
-        <div class="avatar"><p>W</p></div>
-        <div class="name2">Willy Pilly<p class="email">Harry@potter.com</p></div>
-      </div>
-      <form>
-        <div class="mb-3">
-          <input type="text" class="form-control" id="username" placeholder="Username">
-        </div>
-        <div class="mb-3">
-          <input type="text" class="form-control" id="roomcode" placeholder="Roomcode">
-        </div>
-        <button type="submit" class="btn" style="color:white;background:#7dcac7;" id="createbtn">Create</button>
-        <button type="submit" class="btn btn-secondary" id="joinbtn">Join</button>
-      </form>
-    </div>
-    <div class="container" style="display:none;">
-      <div class="profile">
-        <div class="avatar"><p>W</p></div>
-        <div class="name2">Willy Pilly<p class="email">Harry@potter.com</p></div>
-      </div>
-      <ul class="people" id="userlist">
-        <li class="person focus">
-          <span class="title">Willy Pilly </span>
-          <span class="preview">What are you getting... Oh, oops...</span>
-        </li>
-        <li class="person">
-          <span class="title">Darin Garen</span>
-          <span class="preview">Meet me at Hogsmeade and bring...</span>
-        </li>
-        <li class="person">
-          <span class="title">Chance Pants</span>
-          <span class="preview">Have you and Ron done your hom...</span>
-        </li>
-      </ul>
-    </div>
-    <!-- <div class="game-container"></div> -->
-    <!--pre id="messages" data-simplebar>
+    </nav>
+    <div class="container-fluid game-container"></div>
+    <pre id="messages" data-simplebar>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </pre-->
-    <!--nav class="navbar fixed-bottom navbar-dark bg-dark">
+    </pre>
+    <ul id="userlist"></ul>
+    <nav class="navbar fixed-bottom navbar-dark bg-dark">
       <div class="container-fluid">
         <div class="input-group">
           <span class="input-group-text darkspan" id="basic-addon1">Chat</span>
@@ -108,7 +38,7 @@
           <button id="msgsendbtn" class="btn btn-primary">Send</button>
         </div>
       </div>
-    </nav-->
+    </nav>
   </body>
   <script src="/scripts/jquery-3.6.0.min.js"></script>
   <script src="/scripts/ws.js"></script>

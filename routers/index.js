@@ -12,7 +12,7 @@ const router = express.Router();
 // router.use(`/${folder}`, require('../models').router);
 // router.use(`/${folder}/cos`, require('./cos').router);
 // router.use(`/${folder}/elastic`, require('./elastic').router);
-router.use(`/room`, require('./room'));
+router.use(`/room`, require('./room').router);
 
 console.log('Routers Finished Initializing');
 module.exports = router;

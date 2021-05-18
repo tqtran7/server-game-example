@@ -1,12 +1,8 @@
+
 (function () {
 
   const messages = document.querySelector('#messages');
-  const wsButton = document.querySelector('#wsButton');
-  const wsSendButton = document.querySelector('#wsSendButton');
-  const msgsendbtn = document.querySelector('#msgsendbtn');
   const messagebox = document.querySelector('#messagebox');
-  const logout = document.querySelector('#logout');
-  const login = document.querySelector('#login');
 
   if (localStorage['username']) {
     $('#username').val(localStorage['username']);
@@ -15,13 +11,6 @@
   function showMessage(message) {
     messages.textContent += `\n${message}`;
     messages.scrollTop = messages.scrollHeight;
-  }
-
-  function handleResponse(res) {
-    console.log(res);
-    return res.statusCode >= 200 && res.statusCode <= 300
-      ? res.json().then((data) => JSON.stringify(data, null, 2))
-      : Promise.reject(new Error('Unrecognizable response'));
   }
 
   function disableLoginForm(data) {
@@ -63,6 +52,7 @@
       json: true,
       data: { username },
       success: (data) => {
+        console.log(data);
         disableLoginForm(data);
         updateUserList(data);
         showMessage(JSON.stringify(data, null, 2));
@@ -106,42 +96,34 @@
 
     console.log(location);
     ws = new WebSocket(`ws://localhost:80`);
-    
-    ws.onerror = function () {
-      showMessage('WebSocket connection error');
-    };
-    
-    ws.onopen = function () {
-      showMessage('WebSocket connection established');
-    };
-
-    // attempt to parse string into command
-    // if successful, we broadcast event
-    // otherwise, it is just a simple chat message
-    ws.onmessage = function(res) {
-      let detail = res.data;
-      showMessage(detail);
-      try { detail = JSON.parse(detail); }
-      catch (e) { console.log(e); }
-      console.log(typeof detail);
-      if (typeof detail === 'object') {
-        let e = new CustomEvent(detail.event, { detail });
-        console.log(`Dispatching event ${detail.event}`);
-        ws.dispatchEvent(e);
-      }
-    };
-
-    ws.onclose = function () {
+    ws.onerror = () => { showMessage('WebSocket connection error'); };
+    ws.onopen  = () => { showMessage('WebSocket connection established'); };
+    ws.onclose = () => {
       showMessage('WebSocket connection closed');
       ws = null;
     };
 
-    ws.addEventListener('OnUsersJoined', (event) => {
+    ws.onmessage = function(res) {
+      console.log(res.data);
+      try { 
+        let detail = JSON.parse(res.data);
+        if (typeof detail === 'object') {
+          let event = new CustomEvent(detail.event, { detail });
+          ws.dispatchEvent(event);
+        }
+      }
+      catch (e) { console.log(e); }
+    };
+
+    ws.addEventListener('OnChatMessage', (event) => {
+      console.log(`${event.detail.event} Event Triggered!`);
+      showMessage(JSON.stringify(event.detail.data));
+    });
+
+    ws.addEventListener('OnUsersUpdate', (event) => {
       console.log(`${event.detail.event} Event Triggered!`);
       updateUserList(event.detail.data);
     });
-
-    // ws.addEventListener('OnChatMessage')
   };
 
   $('#msgsendbtn').click(() => {
@@ -155,18 +137,5 @@
     ws.send(message);
     messagebox.value = '';
   });
-
-  wsSendButton.onclick = function sendJSON() {
-
-    if (!ws) {
-      showMessage('No WebSocket connection');
-      return;
-    }
-
-    let data = { room: 'abc', data: { a:1, b:2 } };
-    let message = JSON.stringify(data);
-    ws.send(message);
-    // showMessage('Sent "Hello World!"');
-  };
 
 })();

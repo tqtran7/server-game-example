@@ -1,0 +1,93 @@
+
+body { 
+  background-color: #36393f; 
+  padding-top: 4em; 
+  color: #c5c5c5;
+  overflow: hidden;
+}
+
+.darkinput {
+  background: #40444b;
+  color: #c5c5c5;
+  border: 0;
+}
+
+.darkspan {
+  background: #686d75;
+  color: #c5c5c5;
+  border: 0;
+}
+
+/* #roomcode {
+  background: #40444b;
+  color: #c5c5c5;
+  border: 0;
+} */
+
+.game-container {
+  top: 54px;
+  height: 400px;
+  position: fixed;
+  background: #202225;
+  border-bottom: 1px solid #727272;
+}
+
+.room-container {
+  height: 50%;
+  margin-top: 390px;
+  background: #2f3136;
+  z-index: 0;
+  padding: 0;
+}
+
+#userlist {     
+  background: #2f3136;
+  color: #929292;
+  position: absolute;
+  top: 456px;
+  padding-top: 15px;
+  height: 100%;
+  width: 225px;
+  list-style-type: none;
+  border-right: 1px solid #727272;
+}
+
+#userlist .active {
+  color: white;
+}
+
+#userlist .username {
+  position: absolute;
+  left: 60px;
+}
+
+#messages { 
+  position: relative;
+  margin: 0;
+  padding: 0;
+  margin-left: 225px;
+  padding-left: 15px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  margin-top: 393px;
+  height: 500px;
+  overflow-y: auto;
+}
+
+/* #messagebox {
+  background: #40444b;
+  color: #c5c5c5;
+  border: 0;
+} */
+
+/* Scroll bar*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #616161;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bdbdbd;
+}
