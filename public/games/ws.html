@@ -22,6 +22,7 @@
         </div>
       </div>
     </nav> -->
+    
     <div class="chatbox">
       <div class="top-bar">
         <div class="avatar"><p>W</p></div>
@@ -31,33 +32,25 @@
           <i class="fas fa-video"></i>
           <i class="fas fa-times-circle"></i>
         </div>
-      </div>
+      </div><!--top-bar-->
       <div class="middle" id="messages">
-        <div class="voldemort">
-          <div class="incoming">
-            <div class="bubble">Hey, Father's Day is coming up..</div>
-            <div class="bubble">What are you getting.. Oh, oops sorry dude.</div>
-          </div>
-          <div class="outgoing">
-            <div class="bubble lower">Nah, it's cool.</div>
-            <div class="bubble">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
-          </div>
-          <div class="typing">
-            <div class="bubble">
-              <div class="ellipsis one"></div>
-              <div class="ellipsis two"></div>
-              <div class="ellipsis three"></div>
-            </div>
-          </div>
+        <div class="bubble outgoing">Hey, Father's Day is coming up..</div>
+        <div class="bubble outgoing">What are you getting.. Oh, oops sorry dude.</div>
+        <div class="bubble incoming">Nah, it's cool.</div>
+        <div class="bubble incoming">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
+        <div class="bubble">
+          <div class="ellipsis one"></div>
+          <div class="ellipsis two"></div>
+          <div class="ellipsis three"></div>
         </div>
-      </div>
+      </div><!--middle-->
       <div class="bottom-bar chat">
-        <!-- <div class="chat"></div> -->
-          <input type="text" placeholder="Type a message..." />
-          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        <input type="text" placeholder="Type a message..." />
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
       </div>
-    </div>
-    <div class="container">
+    </div><!--chatbox-->
+
+    <div class="container" id="loginform">
       <div class="profile">
         <div class="avatar"><p>W</p></div>
         <div class="name2">Willy Pilly<p class="email">Harry@potter.com</p></div>
@@ -73,7 +66,7 @@
         <button type="submit" class="btn btn-secondary" id="joinbtn">Join</button>
       </form>
     </div>
-    <div class="container" style="display:none;">
+    <div class="container" id="roominfo" style="display:none;">
       <div class="profile">
         <div class="avatar"><p>W</p></div>
         <div class="name2">Willy Pilly<p class="email">Harry@potter.com</p></div>

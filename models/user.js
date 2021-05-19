@@ -1,6 +1,10 @@
 
 const uuid = require('uuid');
 
+/**
+ * Creates a new user with id and name.
+ * @example new User('John Smith');
+ */
 class User {
 
   constructor(name) {

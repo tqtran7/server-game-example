@@ -33,7 +33,8 @@ class Room {
   }
 
   getUserIds() {
-    return Array.from(this.users.values()).map(v => v.getId());
+    return Array.from(this.users.values())
+      .map(user => user.getId());
   }
 
   removeUser(name) {

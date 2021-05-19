@@ -7,6 +7,7 @@ const Room = require('../models/room');
 
 router.post('/create', create);
 router.post('/join', join);
+router.post('/start', start);
 router.post('/leave', leave);
 
 let rooms = new Map();
@@ -70,6 +71,35 @@ function join(req, res) {
     }
     else {
       res.status(400).send({ message: 'Room does not exist!' });
+    }
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
+
+/**
+ * Start a game.
+ * @param {*} req 
+ * @param {*} res 
+ */
+function start(req, res) {
+  try {
+    let roomcode = req.body.roomcode;
+    let gamename = req.body.gamename;
+    if (rooms.has(roomcode)) {
+      let room = rooms.get(roomcode);
+      if (room.users.size < 3) {
+        res.status(400).send({ message: 'Not enough players!' });
+      }
+      else {
+        let Game = require(`../games/${gamename}`);
+        room.game = new Game(room);
+        res.send({ status: 'ok' });
+      }
+    }
+    else {
+      res.status(400).send({ message: 'Game does not exist!' });
     }
   }
   catch (e) {

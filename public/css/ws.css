@@ -179,6 +179,10 @@ body {
   width: 100%;
   opacity: 0.85;
   height: 80%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
 }
 
 .typing {
@@ -216,35 +220,19 @@ body {
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
-  color: #F9FBFF;
   font-size: 0.7em;
   padding: 10px 10px 10px 12px;
   border-radius: 20px;
 }
 
-.lower {
-  margin-top: 45px;
-}
-
 .incoming {
-  width: 50%;
-  padding: 20px;
-}
-
-.incoming .bubble {
-  background: #b2b2b2;
+  background: #dfdfdf;;
+  align-self: flex-end;
 }
 
 .outgoing {
-  position: absolute;
-  padding: 20px;
-  right: 0;
-  top: 15%;
-  width: 50%;
-}
-.outgoing .bubble {
   background: #79C7C5;
-  float: right;
+  align-self: flex-start;
 }
 
 .bottom-bar {
