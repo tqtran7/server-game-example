@@ -1,45 +1,44 @@
 
 (function () {
 
-  const messages = document.querySelector('#messages');
-  const messagebox = document.querySelector('#messagebox');
-
   if (localStorage['username']) {
     $('#username').val(localStorage['username']);
   }
 
   function showMessage(message) {
-    messages.textContent += `\n${message}`;
-    messages.scrollTop = messages.scrollHeight;
+    // messages.textContent += `\n${message}`;
+    // messages.scrollTop = messages.scrollHeight;
   }
 
   function disableLoginForm(data) {
-    $('#createbtn').prop( "disabled", true);
-    $('#joinbtn').prop( "disabled", true);
-    $('#username').prop( "disabled", true);
-    $('#roomcode').prop( "disabled", true);
-    $('#roomcode').val(data.roomcode);
-    if (!localStorage['username']) {
-      localStorage['username'] = username;
-    }
+    $('#loginform').hide();
+    $('#roominfo').show();
+    $('#chatbox').show();
+    localStorage['username'] = $('#username').val();
+  }
+
+  function openChatBox() {
+    $('#chatbox').show();
+  }
+
+  function closeChatBox() {
+    $('#chatbox').hide();
   }
 
   function updateUserList(data) {
     $('#userlist').empty();
     $('#userlist').append(`
-      <li class="active">
-        <i class="fas fa-user-cog"></i>
-        <span class="username">${data.host}</span>
-      </li>
-    `);
+      <li class="person focus">
+        <span class="title">${data.host}</span>
+        <span class="preview">Host Im da boss!</span>
+      </li>`);
     for (let username of data.users) {
       if (username !== data.host) {
         $('#userlist').append(`
-          <li>
-            <i class="fas fa-user"></i>
-            <span class="username">${username}</span>
-          </li>
-        `);
+          <li class="person">
+            <span class="title">${username}</span>
+            <span class="preview">Just a regular member</span>
+          </li>`);
       }
     }
   }
@@ -133,9 +132,9 @@
       return;
     }
     
-    let message = messagebox.value;
+    let message = $('#messages').val();
     ws.send(message);
-    messagebox.value = '';
+    $('#messagebox').html('');
   });
 
 })();

@@ -105,6 +105,64 @@
     });
   });
 
+  function drawMyCards(cards) {
+    $('#mycards').empty();
+    for (let card of cards) {
+      let html = 
+      `<div class="card">
+        <div class="card-text" style="display:flex;">
+          <div class="title-total">
+            <div class="desc">${card}</div>
+          </div>
+        </div>
+      </div>`;
+      $('#mycards').append(html);
+    }
+  }
+
+  function drawCustomer(customer) {
+    let html = 
+    `<div class="card">
+      <div class="card-text">
+        <div class="portada"></div>
+        <div class="title-total">
+          <h2>${customer.name}</h2>
+          <div class="desc">
+            ${customer.cards[0]}
+            ${customer.cards[1]}
+          </div>
+        </div>
+      </div>
+    </div>`;
+    $('#gameboard').append(html);
+  }
+
+  let selectedCards = {};
+  $('#test').click(() => {
+    $('#mycards').empty();
+    let fakecards = ['meat','cake','veggie','fruits'];
+    for (let card of fakecards) {
+      let div = document.createElement('div');
+      div.className = 'card asButton';
+      div.innerHTML = 
+      `<div class="card-text" style="display:flex;">
+        <div class="title-total">
+          <div class="desc">${card}</div>
+        </div>
+      </div>`;
+      div.addEventListener('click', ()=>{
+        console.log(`You selected ${card}`);
+        div.className = 'card asButton selected';
+      });
+      $('#mycards').append(div);
+    }
+  });
+
+  function selectCard(dom) {
+    let value = $(dom).find('.desc').html();
+    console.log(value);
+  }
+
   let ws;
   function connectWebsocket() {
     
@@ -148,6 +206,8 @@
       console.log(`${event.detail.event} Event Triggered!`);
       console.log(event.detail.data);
       showMessage(JSON.stringify(event.detail.data));
+      drawMyCards(event.detail.data.cards);
+      drawCustomer(event.detail.data.customer);
     });
   };
 

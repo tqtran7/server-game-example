@@ -10,20 +10,9 @@
       <title>Game</title>
   </head>
   <body>
-    <!-- <nav class="navbar fixed-top navbar-dark bg-dark">
-      <div class="container-fluid">
-        <div class="input-group">
-          <span class="input-group-text darkspan" id="basic-addon1">@</span>
-          <input type="text" class="form-control darkinput" id="username" placeholder="Username">
-          <span class="input-group-text darkspan" id="basic-addon1">#</span>
-          <input type="text" class="form-control darkinput" id="roomcode" placeholder="Roomcode">
-          <button type="submit" class="btn btn-primary" id="createbtn">Create</button>
-          <button type="submit" class="btn btn-secondary" id="joinbtn">Join</button>
-        </div>
-      </div>
-    </nav> -->
     
-    <div class="chatbox">
+    <i class="fas fa-comments" id="chaticon"></i>
+    <div class="chatbox" id="chatbox" style="display:none;">
       <div class="top-bar">
         <div class="avatar"><p>W</p></div>
         <div class="name">Willy Pilly</div>
@@ -32,7 +21,7 @@
           <i class="fas fa-video"></i>
           <i class="fas fa-times-circle"></i>
         </div>
-      </div><!--top-bar-->
+      </div>
       <div class="middle" id="messages">
         <div class="bubble outgoing">Hey, Father's Day is coming up..</div>
         <div class="bubble outgoing">What are you getting.. Oh, oops sorry dude.</div>
@@ -43,33 +32,36 @@
           <div class="ellipsis two"></div>
           <div class="ellipsis three"></div>
         </div>
-      </div><!--middle-->
+      </div>
       <div class="bottom-bar chat">
         <input type="text" placeholder="Type a message..." />
         <button type="submit"><i class="fas fa-paper-plane"></i></button>
       </div>
-    </div><!--chatbox-->
+    </div>
 
     <div class="container" id="loginform">
       <div class="profile">
         <div class="avatar"><p>W</p></div>
-        <div class="name2">Willy Pilly<p class="email">Harry@potter.com</p></div>
+        <div class="name2">Willy Pilly</div>
       </div>
-      <form>
+      <div>
         <div class="mb-3">
           <input type="text" class="form-control" id="username" placeholder="Username">
         </div>
         <div class="mb-3">
           <input type="text" class="form-control" id="roomcode" placeholder="Roomcode">
         </div>
-        <button type="submit" class="btn" style="color:white;background:#7dcac7;" id="createbtn">Create</button>
-        <button type="submit" class="btn btn-secondary" id="joinbtn">Join</button>
-      </form>
+        <button class="btn" 
+        style="color:white;background:#7dcac7;" id="createbtn">Create</button>
+        <button class="btn btn-secondary" id="joinbtn">Join</button>
+      </div>
     </div>
+
     <div class="container" id="roominfo" style="display:none;">
       <div class="profile">
         <div class="avatar"><p>W</p></div>
-        <div class="name2">Willy Pilly<p class="email">Harry@potter.com</p></div>
+        <div class="name2">Willy Pilly</div>
+        <div class="name2" id="roomcode">Room Code: ABCD</div>
       </div>
       <ul class="people" id="userlist">
         <li class="person focus">
@@ -86,22 +78,7 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="game-container"></div> -->
-    <!--pre id="messages" data-simplebar>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </pre-->
-    <!--nav class="navbar fixed-bottom navbar-dark bg-dark">
-      <div class="container-fluid">
-        <div class="input-group">
-          <span class="input-group-text darkspan" id="basic-addon1">Chat</span>
-          <input type="text" class="form-control darkinput" id="messagebox">
-          <button id="msgsendbtn" class="btn btn-primary">Send</button>
-        </div>
-      </div>
-    </nav-->
+
   </body>
   <script src="/scripts/jquery-3.6.0.min.js"></script>
   <script src="/scripts/ws.js"></script>

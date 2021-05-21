@@ -40,6 +40,7 @@ function create(req, res) {
     req.session.scope.username  = username;
     req.session.scope.roomcode  = room.getRoomCode();
     rooms.set(room.getRoomCode(), room);
+    console.log(room.toString());
     res.send(room.toString());
   }
   catch (e) {
@@ -95,6 +96,7 @@ function start(req, res) {
       else {
         let Game = require(`../games/${gamename}`);
         room.game = new Game(room);
+        room.game.broadcast();
         res.send({ status: 'ok' });
       }
     }

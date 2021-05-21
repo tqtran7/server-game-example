@@ -9,7 +9,6 @@ class SnakeOil {
   constructor(room) {
     this.room = room;
     this.load();
-    this.broadcast();
   }
 
   load() {
