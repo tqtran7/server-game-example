@@ -1,224 +1,181 @@
-
-body { 
-  background-color: #36393f; 
-  padding-top: 4em; 
-  color: #c5c5c5;
-  overflow: hidden;
+@font-face {
+  font-family: FredokaOne;
+  src: url("../fonts/FredokaOne-Regular.ttf");
+}
+html {
+  display: grid;
+  min-height: 100%;
 }
 
-.darkinput {
-  background: #40444b;
-  color: #c5c5c5;
-  border: 0;
+body {
+  display: flex;
 }
 
-.darkspan {
-  background: #686d75;
-  color: #c5c5c5;
-  border: 0;
+#loginscreen {
+  background: #16222e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
-
-/* #roomcode {
-  background: #40444b;
-  color: #c5c5c5;
-  border: 0;
-} */
-
-.game-container {
-  top: 54px;
-  height: 400px;
-  position: fixed;
-  background: #202225;
-  border-bottom: 1px solid #727272;
-  z-index: 100;
+#loginscreen login-form {
+  color: white;
+  font-family: FredokaOne;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  line-height: 32px;
+}
+#loginscreen login-form label {
+  font-size: large;
+  color: #0090ed;
+}
+#loginscreen login-form input {
+  color: white;
+  background: #1b2629;
+  border: 1px solid gray;
+  padding: 12px;
+  border-radius: 8px;
+}
+#loginscreen login-form button {
+  padding: 12px 24px;
+  margin-top: 15px;
+  border: 2px solid black;
+  border-radius: 12px;
+  font-size: larger;
+  color: white;
+  background: #0090ed;
+  background: linear-gradient(180deg, #0090ed 0%, #00a8e3 100%);
 }
 
-#mycards {
+navbar {
+  position: fixed;
+  width: 100%;
+  height: 60px;
   display: flex;
-  flex-wrap: wrap;
+  background: #a69674;
+  border-bottom: 1px solid black;
+  align-items: center;
+  padding-left: 1em;
 }
-
-#gameboard {
-  display: flex;
-  flex-wrap: wrap;
+navbar p {
+  align-self: flex-end;
+  margin-left: 1em;
 }
-
-.game-card {
-  width: 100px;
-  height: 27px;
-  background: azure;
-  border-radius: 5px;
-  text-align: center;
+navbar button {
   margin: 5px;
 }
 
-.game-actions {
-  align-self: flex-end;
-}
-
-.room-container {
-  height: 50%;
-  margin-top: 390px;
-  background: #2f3136;
-  z-index: 0;
-  padding: 0;
-}
-
-#userlist {     
-  background: #2f3136;
-  color: #929292;
-  position: absolute;
-  top: 456px;
-  padding-top: 15px;
+#gamescreen {
+  background: #5e5c51;
+  display: flex;
+  font-family: FredokaOne;
+  font-size: large;
+  width: 100%;
   height: 100%;
-  width: 225px;
-  list-style-type: none;
-  border-right: 1px solid #727272;
 }
-
-#userlist .active {
+#gamescreen ul {
   color: white;
-}
-
-#userlist .username {
-  position: absolute;
-  left: 60px;
-}
-
-#messages { 
-  position: relative;
-  margin: 0;
+  list-style: none;
+  border-right: 2px solid black;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 0;
-  margin-left: 225px;
-  padding-left: 15px;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-  margin-top: 393px;
-  height: 500px;
-  overflow-y: auto;
 }
-
-/* #messagebox {
-  background: #40444b;
-  color: #c5c5c5;
-  border: 0;
-} */
-
-/* Scroll bar*/
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background: #616161;
+#gamescreen ul li {
+  padding: 1em;
+  width: 90%;
+  border: 2px solid black;
   border-radius: 10px;
+  text-shadow: 2px 2px black;
+  background: #0090ed;
+  background: linear-gradient(180deg, #0090ed 0%, #00a8e3 100%);
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #bdbdbd;
-}
-
-.card {
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.5);
-  max-width: 400px;
+#gamescreen players {
   display: flex;
   flex-direction: row;
-  border-radius: 25px;
-  position: relative;
-  margin: 10px;
-  color: #6c6c6c;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-top: 60px;
 }
-
-.card h2 {
-  margin: 0;
-  padding: 0 1rem;
+#gamescreen players .customer {
+  background: #90ae56;
 }
-
-.card .title {
-  padding: 1rem;
-  text-align: right;
-  color: green;
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.card .desc {
-  padding: 0.5rem 1rem;
-  font-size: 12px;
-}
-
-.card .actions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+#gamescreen players player {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  min-height: 210px;
+  color: black;
+  background: #f4d0b3;
+  border: 4px solid black;
   align-items: center;
-  padding: 0.5rem 1rem;
+  justify-content: flex-start;
+  margin: 2em;
 }
-
-.card svg {
-  width: 85px;
-  height: 85px;
-  margin: 0 auto;
+#gamescreen players player name-container {
+  width: 90%;
+  position: relative;
+  top: -15px;
+  display: flex;
+  flex-direction: row;
+  height: 44px;
 }
-
-.img-avatar {
-  width: 80px;
-  height: 80px;
-  position: absolute;
-  border-radius: 50%;
-  border: 6px solid white;
-  background-image: linear-gradient(-60deg, #16a085 0%, #f4d03f 100%);
-  top: 15px;
-  left: 85px;
-}
-
-.card-text {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-}
-
-.title-total {
-  padding: 10px;
-}
-
-path {
-  fill: white;
-}
-
-.img-portada {
+#gamescreen players player name-container name {
+  padding: 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   width: 100%;
+  text-align: center;
+  line-height: 44px;
+  background: #99671a;
+  vertical-align: middle;
+  border: 3px solid black;
+  display: inline-table;
 }
-
-.portada {
+#gamescreen players player name-container .left {
+  background: url(../ui/Wood_Left.png);
+  background-size: contain;
+  order: 1;
+  flex-basis: 16%;
+}
+#gamescreen players player name-container .center {
+  background: url(../ui/Wood_Center.png);
+  background-size: contain;
+  order: 2;
+  flex-basis: 90%;
+}
+#gamescreen players player name-container .right {
+  background: url(../ui/Wood_Right.png);
+  background-size: contain;
+  order: 3;
+  flex-basis: 16%;
+}
+#gamescreen players player words {
   width: 100%;
-  height: 100%;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  background-image: url("https://m.media-amazon.com/images/S/aplus-media/vc/cab6b08a-dd8f-4534-b845-e33489e91240._CR75,0,300,300_PT0_SX300__.jpg");
-  background-position: bottom center;
-  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
-
-.card button {
-  border: none;
-  background: none;
-  font-size: 24px;
-  color: #8bc34a;
-  cursor: pointer;
-  transition: 0.5s;
-}
-
-.card button:hover {
-  color: #4CAF50;
-  transform: rotate(22deg);
-}
-
-.asButton {
+#gamescreen players player words p {
+  margin: 5px 10px;
   cursor: pointer;
 }
-
-.selected {
-  background: #90c3f0;
+#gamescreen players player words .selected {
+  color: red;
 }
+#gamescreen players player choosen-words {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+}
+
+/*# sourceMappingURL=snakeoil.css.map */

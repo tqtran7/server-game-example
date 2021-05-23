@@ -1,46 +1,35 @@
-
 (function () {
-
-  const messages = document.querySelector('#messages');
-  const messagebox = document.querySelector('#messagebox');
 
   if (localStorage['username']) {
     $('#username').val(localStorage['username']);
   }
 
   function showMessage(message) {
-    messages.textContent += `\n${message}`;
-    messages.scrollTop = messages.scrollHeight;
+    // messages.textContent += `\n${message}`;
+    // messages.scrollTop = messages.scrollHeight;
   }
 
   function disableLoginForm(data) {
-    $('#createbtn').prop( "disabled", true);
-    $('#joinbtn').prop( "disabled", true);
-    $('#username').prop( "disabled", true);
-    $('#roomcode').prop( "disabled", true);
+    $('#loginform').hide();
     $('#roomcode').val(data.roomcode);
-    if (!localStorage['username']) {
-      localStorage['username'] = username;
-    }
+    $('#roomcodedisplay').html(`Room Code: ${data.roomcode}`);
+    localStorage['username'] = $('#username').val();
   }
 
   function updateUserList(data) {
-    $('#userlist').empty();
-    $('#userlist').append(`
-      <li class="active">
-        <i class="fas fa-user-cog"></i>
-        <span class="username">${data.host}</span>
-      </li>
-    `);
+    $('#players').empty();
     for (let username of data.users) {
-      if (username !== data.host) {
-        $('#userlist').append(`
-          <li>
-            <i class="fas fa-user"></i>
-            <span class="username">${username}</span>
-          </li>
-        `);
-      }
+      $('#players').append(`
+      <player id="${username}">
+        <name-container>
+          <name>${username}</name>
+        </name-container>
+        <words style="display:none;"></words>
+        <choosen-words>
+          <p>???</p>
+          <p>???</p>
+        </choosen-words>
+      </player>`);
     }
   }
 
@@ -55,7 +44,6 @@
         console.log(data);
         disableLoginForm(data);
         updateUserList(data);
-        showMessage(JSON.stringify(data, null, 2));
         connectWebsocket();
       },
       error: (error) => {
@@ -74,9 +62,9 @@
       json: true,
       data: { username, roomcode },
       success: (data) => {
+        console.log(data);
         disableLoginForm(data);
         updateUserList(data);
-        showMessage(JSON.stringify(data, null, 2));
         connectWebsocket();
       },
       error: (error) => {
@@ -96,7 +84,6 @@
       data: { gamename, roomcode },
       success: (data) => {
         console.log(data);
-        showMessage(JSON.stringify(data, null, 2));
       },
       error: (error) => {
         console.log(error.responseJSON);
@@ -104,64 +91,128 @@
       }
     });
   });
+  
+  let selectedMap = {};
+  let selectedCards = [];
 
   function drawMyCards(cards) {
-    $('#mycards').empty();
+    
+    let username = $('#username').val();
+    $(`#${username} choosen-words`).hide();
+    let words = $(`#${username} words`);
+    words.show();
+    words.empty();
+    selectedMap = {};
+    selectedCards = [];
+
     for (let card of cards) {
-      let html = 
-      `<div class="card">
-        <div class="card-text" style="display:flex;">
-          <div class="title-total">
-            <div class="desc">${card}</div>
-          </div>
-        </div>
-      </div>`;
-      $('#mycards').append(html);
+      
+      let p = document.createElement('p');
+      p.innerHTML = card;
+      words.append(p);
+
+      // cards are not selected by default
+      selectedMap[card] = { selected: false, element: p };
+
+      p.addEventListener('click', ()=>{
+
+        // user toggled the selection state of card
+        selectedMap[card].selected = !selectedMap[card].selected;
+
+        // user clicked on a card and selected it
+        if (selectedMap[card].selected) {
+
+          // only two cards can be selected at a time
+          // force remove the oldest selected one
+          if (selectedCards.length >= 2) { 
+            let unselected = selectedCards.shift();
+            selectedMap[unselected].selected = false;
+            selectedMap[unselected].element.className = '';
+          }
+
+          // quota hasnt been met
+          // just keep adding until we get there
+          selectedCards.push(card);
+          selectedMap[card].element.className = 'selected';
+        }
+
+        // user clicked on a selected item to unselect it
+        // remove it from selected cards
+        else {
+          selectedMap[card].element.className = '';
+          let index = selectedCards.indexOf(card);
+          if (index >= 0) { selectedCards.splice(index, 1); }
+        }
+
+        console.log(selectedCards);
+      }); 
     }
   }
 
   function drawCustomer(customer) {
-    let html = 
-    `<div class="card">
-      <div class="card-text">
-        <div class="portada"></div>
-        <div class="title-total">
-          <h2>${customer.name}</h2>
-          <div class="desc">
-            ${customer.cards[0]}
-            ${customer.cards[1]}
-          </div>
-        </div>
-      </div>
-    </div>`;
-    $('#gameboard').append(html);
+    let selector = `#${customer.name}`;
+    $(selector).addClass('customer');
+    let cards = $(`${selector}  choosen-words p`).toArray();
+    if (cards.length) {
+      cards[0].innerHTML = customer.cards[0];
+      cards[1].innerHTML = customer.cards[1];
+    }
   }
 
-  let selectedCards = {};
+
   $('#test').click(() => {
     $('#mycards').empty();
-    let fakecards = ['meat','cake','veggie','fruits'];
+    let fakecards = ['meat','cake','veggie','fruits','five','mastecard','seven-eleven'];
     for (let card of fakecards) {
+      
       let div = document.createElement('div');
       div.className = 'card asButton';
       div.innerHTML = 
       `<div class="card-text" style="display:flex;">
-        <div class="title-total">
           <div class="desc">${card}</div>
-        </div>
       </div>`;
+
+      // cards are not selected by default
+      selectedMap[card] = {
+        selected: false,
+        div: div
+      };
+
       div.addEventListener('click', ()=>{
-        console.log(`You selected ${card}`);
-        div.className = 'card asButton selected';
+
+        // user toggled the selection state of card
+        selectedMap[card].selected = !selectedMap[card].selected;
+
+        // user clicked on a card and selected it
+        if (selectedMap[card].selected) {
+
+          // only two cards can be selected at a time
+          // force remove the oldest selected one
+          if (selectedCards.length >= 2) { 
+            let unselected = selectedCards.shift();
+            selectedMap[unselected].selected = false;
+            selectedMap[unselected].div.className = 'card asButton';
+          }
+
+          // quota hasnt been met
+          // just keep adding until we get there
+          selectedCards.push(card);
+          selectedMap[card].div.className = 'card asButton selected';
+        }
+
+        // user clicked on a selected item to unselect it
+        // remove it from selected cards
+        else {
+          selectedMap[card].div.className = 'card asButton';
+          let index = selectedCards.indexOf(card);
+          if (index >= 0) { selectedCards.splice(index, 1); }
+        }
+
+        console.log(selectedCards);
       });
       $('#mycards').append(div);
     }
   });
-
-  function selectCard(dom) {
-    let value = $(dom).find('.desc').html();
-    console.log(value);
-  }
 
   let ws;
   function connectWebsocket() {
@@ -204,10 +255,17 @@
 
     ws.addEventListener('OnGameStart', (event) => {
       console.log(`${event.detail.event} Event Triggered!`);
-      console.log(event.detail.data);
-      showMessage(JSON.stringify(event.detail.data));
-      drawMyCards(event.detail.data.cards);
-      drawCustomer(event.detail.data.customer);
+      let data = event.detail.data;
+      console.log(data);
+      
+      $('#startbtn').prop("disabled",true);
+      
+      // showMessage(JSON.stringify(event.detail.data));
+      drawCustomer(data.customer);
+      let username = $('#username').val();
+      if (username !== data.customer.name) {
+        drawMyCards(data.cards);
+      }
     });
   };
 
@@ -218,9 +276,9 @@
       return;
     }
     
-    let message = messagebox.value;
+    let message = $('#messages').val();
     ws.send(message);
-    messagebox.value = '';
+    $('#messagebox').html('');
   });
 
 })();

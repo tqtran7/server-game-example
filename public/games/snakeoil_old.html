@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"-->
+      <script src="https://kit.fontawesome.com/3d3f043bcd.js" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="/css/snakeoil.css">
+      <title>Game</title>
+  </head>
+  <body>
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+      <div class="container-fluid">
+        <div class="input-group">
+          <span class="input-group-text darkspan" id="basic-addon1">@</span>
+          <input type="text" class="form-control darkinput" id="username" placeholder="Username">
+          <span class="input-group-text darkspan" id="basic-addon1">#</span>
+          <input type="text" class="form-control darkinput" id="roomcode" placeholder="Roomcode">
+          <button class="btn btn-primary" id="createbtn">Create</button>
+          <button class="btn btn-secondary" id="joinbtn">Join</button>
+          <button class="btn btn-info" id="startbtn">Start</button>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid game-container">
+      <div id="mycards"></div>
+      <div id="gameboard"><div class="card">
+        <div class="card-text">
+          <div class="portada"></div>
+          <div class="title-total">
+            <h2>${customer.name}</h2>
+            <div class="desc">
+              ${customer.cards[0]}
+              ${customer.cards[1]}
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <div class="game-actions">
+        <button class="btn btn-primary">Pitch</button>
+        <button class="btn btn-primary" id="test">Test</button>
+      </div>
+    </div>
+    <pre id="messages" data-simplebar>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    </pre>
+    <ul id="userlist"></ul>
+    <nav class="navbar fixed-bottom navbar-dark bg-dark">
+      <div class="container-fluid">
+        <div class="input-group">
+          <span class="input-group-text darkspan" id="basic-addon1">Chat</span>
+          <input type="text" class="form-control darkinput" id="messagebox">
+          <button id="msgsendbtn" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+    </nav>
+  </body>
+  <script src="/scripts/jquery-3.6.0.min.js"></script>
+  <script src="/scripts/snakeoil.js"></script>
+</html>

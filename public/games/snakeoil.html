@@ -4,49 +4,143 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link href="/css/bootstrap.min.css" rel="stylesheet">
-      <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"-->
       <script src="https://kit.fontawesome.com/3d3f043bcd.js" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="/css/snakeoil.css">
       <title>Game</title>
   </head>
   <body>
-    <nav class="navbar fixed-top navbar-dark bg-dark">
-      <div class="container-fluid">
-        <div class="input-group">
-          <span class="input-group-text darkspan" id="basic-addon1">@</span>
-          <input type="text" class="form-control darkinput" id="username" placeholder="Username">
-          <span class="input-group-text darkspan" id="basic-addon1">#</span>
-          <input type="text" class="form-control darkinput" id="roomcode" placeholder="Roomcode">
-          <button class="btn btn-primary" id="createbtn">Create</button>
+
+    <screen id="loginscreen">
+      <login-form>
+        <label>User Name</label>
+        <input type="text" id="username">
+        <label>Room Code</label>
+        <input type="text" id="roomcode">
+        <div>
+          <button id="createbtn">Create Room</button>
+          <button id="joinbtn">Join Room</button>
+        </div>
+      </login-form>
+    </screen>
+
+    <screen id="gamescreen">
+      <navbar>
+        <button id="startbtn">Start</button>
+        <button id="pitchbtn">Pitch</button>
+        <p id="roomcodedisplay">Room Code: ABCD</p>
+      </navbar>
+      <players id="players">
+        <player>
+          <name-container>
+            <name>Willy Pilly</name>
+          </name-container>
+          <words style="display:none;"></words>
+          <choosen-words>
+            <p>???</p>
+            <p>???</p>
+          </choosen-words>
+        </player>
+      </players>
+    </screen>
+
+    <!--
+
+    <screen id="GameScreen" style="display:none;">
+      <i class="fas fa-comments" id="chaticon"></i>
+      <div class="chatbox" id="chatbox" style="display:none;">
+        <div class="top-bar">
+          <div class="avatar"><p>W</p></div>
+          <div class="name">Willy Pilly</div>
+          <div class="icons">
+            <i class="fas fa-phone"></i>
+            <i class="fas fa-video"></i>
+            <i class="fas fa-times-circle"></i>
+          </div>
+        </div>
+        <div class="middle" id="messages">
+          <div class="bubble outgoing">Hey, Father's Day is coming up..</div>
+          <div class="bubble outgoing">What are you getting.. Oh, oops sorry dude.</div>
+          <div class="bubble incoming">Nah, it's cool.</div>
+          <div class="bubble incoming">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
+          <div class="bubble">
+            <div class="ellipsis one"></div>
+            <div class="ellipsis two"></div>
+            <div class="ellipsis three"></div>
+          </div>
+        </div>
+        <div class="bottom-bar chat">
+          <input type="text" placeholder="Type a message..." />
+          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+
+      <div class="container" id="loginform">
+        <div class="profile">
+          <div class="avatar"><p>W</p></div>
+          <div class="name2">Willy Pilly</div>
+        </div>
+        <div>
+          <div class="mb-3">
+            <input type="text" class="form-control" id="username" placeholder="Username">
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" id="roomcode" placeholder="Roomcode">
+          </div>
+          <button class="btn" 
+          style="color:white;background:#7dcac7;" id="createbtn">Create</button>
           <button class="btn btn-secondary" id="joinbtn">Join</button>
-          <button class="btn btn-info" id="startbtn">Start</button>
         </div>
       </div>
-    </nav>
-    <div class="container-fluid game-container">
-      <div id="mycards"></div>
-      <div id="gameboard"></div>
-      <div class="game-actions">
-        <button class="btn btn-primary">Pitch</button>
-        <button class="btn btn-primary" id="test">Test</button>
+
+      <div class="container" id="roominfo" style="display:none;">
+        <div class="profile">
+          <div class="avatar"><p>W</p></div>
+          <div class="name2">Willy Pilly</div>
+          <div class="name2" id="roomcodedisplay">Room Code: ABCD</div>
+        </div>
+        <ul class="people" id="userlist">
+          <li class="person focus">
+            <span class="title">Willy Pilly </span>
+            <span class="preview">What are you getting... Oh, oops...</span>
+          </li>
+          <li class="person">
+            <span class="title">Darin Garen</span>
+            <span class="preview">Meet me at Hogsmeade and bring...</span>
+          </li>
+          <li class="person">
+            <span class="title">Chance Pants</span>
+            <span class="preview">Have you and Ron done your hom...</span>
+          </li>
+        </ul>
       </div>
-    </div>
-    <pre id="messages" data-simplebar>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </pre>
-    <ul id="userlist"></ul>
-    <nav class="navbar fixed-bottom navbar-dark bg-dark">
-      <div class="container-fluid">
-        <div class="input-group">
-          <span class="input-group-text darkspan" id="basic-addon1">Chat</span>
-          <input type="text" class="form-control darkinput" id="messagebox">
-          <button id="msgsendbtn" class="btn btn-primary">Send</button>
+
+      <div class="game-container">
+        <div id="mycards"></div>
+        <div class="game-actions">
+          <button class="btn btn-primary">Pitch</button>
+          <button class="btn btn-primary" id="test">Test</button>
+        </div>
+        <div id="gameboard">
+
+          <div class="cardboard">
+            <p>word1</p>
+            <p>word2</p>
+            <div class="name">Willus Best</div>
+          </div>
+
+          <!- <div class="card">
+            <div class="card-text">
+              <div class="portada"></div>
+              <div class="title-total">
+                <h2>Ready Player 1</h2>
+                <div class="desc">Wicked Wild West</div>
+              </div>
+            </div>
+          </div> ->
         </div>
       </div>
-    </nav>
+    </screen>
+  -->
   </body>
   <script src="/scripts/jquery-3.6.0.min.js"></script>
   <script src="/scripts/snakeoil.js"></script>
