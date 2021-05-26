@@ -4,6 +4,12 @@
   src: url('../fonts/FredokaOne-Regular.ttf')
 }
 
+$primary-color: #a69674;
+$customer-color: #a6924e;
+$background-color: #5e5c51;
+$input-color: #1f1b29;
+$primary-gradient: linear-gradient(rgb(237, 230, 0) 0%, rgb(227, 124, 0) 100%);
+
 html {
   display: grid;
   min-height: 100%;
@@ -11,16 +17,27 @@ html {
 
 body {
   display: flex;
+  background: $background-color;
 }
 
-#loginscreen {
+button {
+  padding: 6px 12px;
+  border: 1px solid black;
+  border-radius: 12px;
+  // background: #0090ed;
+  // background: linear-gradient(180deg, #0090ed 0%, #00a8e3 100%);
+  background: $primary-gradient;
+}
 
-  background: #16222e;
+.loginscreen {
+
+  // background: #16222e;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+  border-right: 1px solid black;
 
   login-form {
     
@@ -32,12 +49,14 @@ body {
 
     label {
       font-size: large;
-      color: #0090ed;
+      // color: #0090ed;
+      color: #fee571;
     }
 
     input {
       color: white;
-      background: #1b2629;
+      // background: #1b2629;
+      background: $input-color;
       border: 1px solid gray;
       padding: 12px;
       border-radius: 8px;
@@ -49,9 +68,6 @@ body {
       border: 2px solid black;
       border-radius: 12px;
       font-size: larger;
-      color: white;
-      background: rgb(0,144,237);
-      background: linear-gradient(180deg, rgba(0,144,237,1) 0%, rgba(0,168,227,1) 100%);
     }
 
   }
@@ -68,6 +84,7 @@ navbar {
   border-bottom: 1px solid black;
   align-items: center;
   padding-left: 1em;
+  z-index: 100;
 
   p {
     align-self: flex-end;
@@ -82,7 +99,7 @@ navbar {
 
 #gamescreen {
 
-  background: #5e5c51;
+  // background: #5e5c51;
   display: flex;
   font-family: FredokaOne;
   font-size: large;
@@ -119,10 +136,11 @@ navbar {
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
-    margin-top: 60px;
+    margin-top: 90px;
+    margin-left: 1em;
 
     .customer {
-      background: #90ae56;
+      background: $customer-color;
     }
 
     player {
@@ -132,11 +150,11 @@ navbar {
       width: 200px;
       min-height: 210px;
       color: black;
-      background: #f4d0b3;
+      background: $primary-color;
       border: 4px solid black;
       align-items: center;
       justify-content: flex-start;
-      margin: 2em;
+      margin: 1em;
 
       name-container {
         width: 90%;
@@ -154,33 +172,11 @@ navbar {
           width: 100%;
           text-align: center;
           line-height: 44px;
-          background: #99671a;
+          background: $primary-gradient;
           vertical-align: middle;
           border: 3px solid black;
           display: inline-table;
         }
-
-        .left {
-          background: url(../ui/Wood_Left.png);
-          background-size: contain;
-          order: 1;
-          flex-basis: 16%;
-        }
-
-        .center {
-          background: url(../ui/Wood_Center.png);
-          background-size: contain;
-          order: 2;
-          flex-basis: 90%;
-        }
-
-        .right {
-          background: url(../ui/Wood_Right.png);
-          background-size: contain;
-          order: 3;
-          flex-basis: 16%;
-        }
-
       }
 
       words {
@@ -196,17 +192,22 @@ navbar {
         }
 
         .selected {
-          color: red;
+          color: white;
+          text-shadow: 2px 2px black;
         }
       }
 
-      choosen-words {
+      selected {
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         margin-top: 1em;
+
+        .timer {
+          color: #b32e2e;
+        }
       }
       
     }

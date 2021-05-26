@@ -15,7 +15,7 @@ const sessionParser = session({
 });
 
 app.use(express.static('public'));
-app.use(parser.urlencoded({ extended: false }));
+app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 app.use(sessionParser);
 

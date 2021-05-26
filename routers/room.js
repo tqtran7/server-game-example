@@ -8,6 +8,7 @@ const Room = require('../models/room');
 router.post('/create', create);
 router.post('/join', join);
 router.post('/start', start);
+router.post('/action', action);
 router.post('/leave', leave);
 
 let rooms = new Map();
@@ -110,6 +111,33 @@ function start(req, res) {
 }
 
 /**
+ * Pass RPC action to the game.
+ * @param {*} req 
+ * @param {*} res 
+ */
+ function action(req, res) {
+  try {
+    // checks that room and game exists
+    let roomcode = req.body.roomcode;
+    if (rooms.has(roomcode)) {
+      let room = rooms.get(roomcode);
+      if (room.game) {
+        let action = req.body.action;
+        let data = req.body.actionData;
+        room.game[action](req, data);
+        res.send({ status: 'ok' });
+      }
+    }
+    else {
+      res.status(400).send({ message: 'Game does not exist!' });
+    }
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
+
+/**
  * When a user leaves the room.
  * Get rid of their session and socket.
  * If user is a host, promote another user to host.
@@ -155,3 +183,4 @@ function leave(req, res) {
     console.log(e);
   }
 }
+

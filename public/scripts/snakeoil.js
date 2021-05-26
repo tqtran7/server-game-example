@@ -1,16 +1,15 @@
 (function () {
 
+  let selectedMap = {};
+  let selectedCards = [];
+
   if (localStorage['username']) {
     $('#username').val(localStorage['username']);
   }
 
-  function showMessage(message) {
-    // messages.textContent += `\n${message}`;
-    // messages.scrollTop = messages.scrollHeight;
-  }
-
   function disableLoginForm(data) {
-    $('#loginform').hide();
+    $('#loginscreen').hide();
+    $('#gamescreen').show();
     $('#roomcode').val(data.roomcode);
     $('#roomcodedisplay').html(`Room Code: ${data.roomcode}`);
     localStorage['username'] = $('#username').val();
@@ -25,10 +24,11 @@
           <name>${username}</name>
         </name-container>
         <words style="display:none;"></words>
-        <choosen-words>
+        <selected>
           <p>???</p>
           <p>???</p>
-        </choosen-words>
+          <p class="timer" style="display:none;">30s</p>
+        </selected>
       </player>`);
     }
   }
@@ -48,7 +48,6 @@
       },
       error: (error) => {
         console.log(error.responseJSON);
-        showMessage(error.responseText);
       }
     });
   });
@@ -69,7 +68,6 @@
       },
       error: (error) => {
         console.log(error.responseJSON);
-        showMessage(error.responseText);
       }
     });
   });
@@ -82,23 +80,36 @@
       url: '/room/start',
       json: true,
       data: { gamename, roomcode },
-      success: (data) => {
-        console.log(data);
-      },
       error: (error) => {
         console.log(error.responseJSON);
-        showMessage(error.responseText);
       }
     });
   });
-  
-  let selectedMap = {};
-  let selectedCards = [];
+
+  $('#pitchbtn').click(function() {
+    let roomcode = $('#roomcode').val();
+    let data = JSON.stringify({
+      roomcode: roomcode,
+      action: 'pitch',
+      actionData: selectedCards,
+    });
+    console.log(data);
+    $.ajax({
+      method: 'POST',
+      url: '/room/action',
+      data: data,
+      dataType: 'json',
+      contentType:"application/json",
+      error: (error) => {
+        console.log(error.responseJSON);
+      }
+    });
+  });
 
   function drawMyCards(cards) {
     
     let username = $('#username').val();
-    $(`#${username} choosen-words`).hide();
+    $(`#${username} selected`).hide();
     let words = $(`#${username} words`);
     words.show();
     words.empty();
@@ -152,67 +163,36 @@
   function drawCustomer(customer) {
     let selector = `#${customer.name}`;
     $(selector).addClass('customer');
-    let cards = $(`${selector}  choosen-words p`).toArray();
+    drawSelected(customer);
+  }
+
+  function drawSelected(player) {
+    let selector = `#${player.name}`;
+    $(`${selector} words`).hide();
+    $(`${selector} selected`).show();
+    let cards = $(`${selector} selected p`).toArray();
     if (cards.length) {
-      cards[0].innerHTML = customer.cards[0];
-      cards[1].innerHTML = customer.cards[1];
+      cards[0].innerHTML = player.cards[0];
+      cards[1].innerHTML = player.cards[1];
     }
   }
 
-
-  $('#test').click(() => {
-    $('#mycards').empty();
-    let fakecards = ['meat','cake','veggie','fruits','five','mastecard','seven-eleven'];
-    for (let card of fakecards) {
-      
-      let div = document.createElement('div');
-      div.className = 'card asButton';
-      div.innerHTML = 
-      `<div class="card-text" style="display:flex;">
-          <div class="desc">${card}</div>
-      </div>`;
-
-      // cards are not selected by default
-      selectedMap[card] = {
-        selected: false,
-        div: div
-      };
-
-      div.addEventListener('click', ()=>{
-
-        // user toggled the selection state of card
-        selectedMap[card].selected = !selectedMap[card].selected;
-
-        // user clicked on a card and selected it
-        if (selectedMap[card].selected) {
-
-          // only two cards can be selected at a time
-          // force remove the oldest selected one
-          if (selectedCards.length >= 2) { 
-            let unselected = selectedCards.shift();
-            selectedMap[unselected].selected = false;
-            selectedMap[unselected].div.className = 'card asButton';
-          }
-
-          // quota hasnt been met
-          // just keep adding until we get there
-          selectedCards.push(card);
-          selectedMap[card].div.className = 'card asButton selected';
-        }
-
-        // user clicked on a selected item to unselect it
-        // remove it from selected cards
-        else {
-          selectedMap[card].div.className = 'card asButton';
-          let index = selectedCards.indexOf(card);
-          if (index >= 0) { selectedCards.splice(index, 1); }
-        }
-
-        console.log(selectedCards);
-      });
-      $('#mycards').append(div);
-    }
-  });
+  function startTimer(player) {
+    let time = 30;
+    let selector = `#${player.name}`;
+    let timerDom = $(`${selector} selected .timer`);
+    timerDom.show();
+    let timer = setInterval(function() {
+      time--;
+      timerDom.html(`${time}s`);
+      console.log(`Timer @${time}`);
+      if (time === 0) {
+        clearInterval(timer);
+        timerDom.html("Pitched!");
+        console.log(`Timer completed!`);
+      }
+    }, 1000);
+  }
 
   let ws;
   function connectWebsocket() {
@@ -224,10 +204,10 @@
 
     console.log(location);
     ws = new WebSocket(`ws://localhost:80`);
-    ws.onerror = () => { showMessage('WebSocket connection error'); };
-    ws.onopen  = () => { showMessage('WebSocket connection established'); };
+    ws.onerror = () => { console.log('WebSocket connection error'); };
+    ws.onopen  = () => { console.log('WebSocket connection established'); };
     ws.onclose = () => {
-      showMessage('WebSocket connection closed');
+      console.log('WebSocket connection closed');
       ws = null;
     };
 
@@ -245,7 +225,6 @@
 
     ws.addEventListener('OnChatMessage', (event) => {
       console.log(`${event.detail.event} Event Triggered!`);
-      showMessage(JSON.stringify(event.detail.data));
     });
 
     ws.addEventListener('OnUsersUpdate', (event) => {
@@ -259,20 +238,27 @@
       console.log(data);
       
       $('#startbtn').prop("disabled",true);
-      
-      // showMessage(JSON.stringify(event.detail.data));
+
       drawCustomer(data.customer);
       let username = $('#username').val();
       if (username !== data.customer.name) {
         drawMyCards(data.cards);
       }
     });
+
+    ws.addEventListener('OnPlayerPitch', (event) => {
+      console.log(`${event.detail.event} Event Triggered!`);
+      let player = event.detail.data;
+      console.log(player);
+      drawSelected(player);
+      startTimer(player);
+    });
   };
 
   $('#msgsendbtn').click(() => {
 
     if (!ws) {
-      showMessage('No WebSocket connection');
+      console.log('No WebSocket connection');
       return;
     }
     

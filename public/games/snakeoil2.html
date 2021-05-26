@@ -10,20 +10,20 @@
   </head>
   <body>
 
-    <screen id="loginscreen" class="loginscreen">
+    <screen class="loginscreen">
       <login-form>
         <label>User Name</label>
         <input type="text" id="username">
         <label>Room Code</label>
         <input type="text" id="roomcode">
-        <button-group>
+        <div>
           <button id="createbtn">Create Room</button>
           <button id="joinbtn">Join Room</button>
-        </button-group>
+        </div>
       </login-form>
     </screen>
 
-    <screen id="gamescreen" style="display:none;">
+    <screen id="gamescreen">
       <navbar>
         <button id="startbtn">Start</button>
         <button id="pitchbtn">Pitch</button>
@@ -35,10 +35,10 @@
             <name>Willy Pilly</name>
           </name-container>
           <words style="display:none;"></words>
-          <selected>
+          <choosen-words>
             <p>???</p>
             <p>???</p>
-          </selected>
+          </choosen-words>
         </player>
       </players>
     </screen>
@@ -46,4 +46,26 @@
   </body>
   <script src="/scripts/jquery-3.6.0.min.js"></script>
   <script src="/scripts/snakeoil.js"></script>
+  <script>
+    
+    let randomNames = [
+      'Willy',
+      'Darin',
+      'Karyn',
+      'Chance',
+      'Ty',
+      'Mayah',
+      'Nick',
+      'Katyln',
+      'Moca',
+      'Tai',
+      'Yonko'
+    ];
+
+    let n = Math.floor(Math.random() * randomNames.length);
+    let x = Math.floor(Math.random() * 9);
+    let randomName = randomNames[n] + x;
+    $('#username').val(randomName);
+
+  </script>
 </html>

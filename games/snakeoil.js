@@ -24,10 +24,12 @@ class SnakeOil {
     // Pick a customer and assign cards
     this.pickCustomer();
     this.players = new Map();
-    this.players.set(this.customer.getName(), [
-      ...d.splice(randomDescriptor, 1),
-      ...p.splice(randomPerson, 1),
-    ]);
+    this.players.set(this.customer.getName(), {
+      cards: [
+        ...d.splice(randomDescriptor, 1),
+        ...p.splice(randomPerson, 1),
+      ]
+    });
 
     // Reshuffle deck and give everyone else cards
     this.cards = [ ...p, ...d, ...g, ];
@@ -37,13 +39,14 @@ class SnakeOil {
 
   broadcast() {
     let customerName = this.customer.getName();
-    let customerCards = this.players.get(customerName);
-    this.players.forEach((cards, playerName) => {
+    let customerInfo = this.players.get(customerName);
+    this.players.forEach((playerInfo, playerName) => {
       let sid = this.room.getUser(playerName).getId();
+      let cards = playerInfo.cards;
       let data = {
         customer: {
           name: customerName,
-          cards: customerCards
+          cards: customerInfo.cards
         },
         cards: cards,
       };
@@ -83,7 +86,9 @@ class SnakeOil {
   dealCards() {
     this.room.users.forEach((user, name) => {
       if (user != this.customer) {
-        this.players.set(name, this.distributeCards(7));
+        this.players.set(name, {
+          cards: this.distributeCards(7)
+        });
       }
     });
   }
@@ -92,9 +97,24 @@ class SnakeOil {
     return this.cards.splice(0, n);
   }
 
+  pitch(req, selected) {
+    let username = req.session.scope.username;
+    if (this.players.has(username)) {
+      let playerInfo = this.players.get(username);
+      playerInfo.selected = selected;
+      let sids = this.room.getUserIds();
+      socket.broadcast('OnPlayerPitch', sids, {
+        name: username,
+        cards: playerInfo.selected,
+      });
+    }
+  }
+
   jsonfy(map) {
     let json = {};
-    map.forEach((value, key) => { json[key] = value; });
+    map.forEach((value, key) => { 
+      json[key] = value.cards; 
+    });
     return json;
   }
 
