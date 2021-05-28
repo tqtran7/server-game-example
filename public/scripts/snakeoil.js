@@ -203,7 +203,10 @@
     }
 
     console.log(location);
-    ws = new WebSocket(`ws://${window.location.host}`);
+    let endpoint = windown.location.host === 'localhost' ?
+      `ws://${window.location.host}`:
+      `wss://${window.location.host}`;
+    ws = new WebSocket(endpoint);
     ws.onerror = () => { console.log('WebSocket connection error'); };
     ws.onopen  = () => { console.log('WebSocket connection established'); };
     ws.onclose = () => {
