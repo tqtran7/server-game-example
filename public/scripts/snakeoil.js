@@ -8,6 +8,7 @@
   }
 
   function disableLoginForm(data) {
+    $('#pitchbtn').prop("disabled", true);
     $('#loginscreen').hide();
     $('#gamescreen').show();
     $('#roomcode').val(data.roomcode);
@@ -87,6 +88,7 @@
   });
 
   $('#pitchbtn').click(function() {
+    $('#pitchbtn').prop("disabled", true);
     let roomcode = $('#roomcode').val();
     let data = JSON.stringify({
       roomcode: roomcode,
@@ -240,7 +242,8 @@
       let data = event.detail.data;
       console.log(data);
       
-      $('#startbtn').prop("disabled",true);
+      $('#startbtn').prop("disabled", true);
+      $('#pitchbtn').prop("disabled", false);
 
       drawCustomer(data.customer);
       let username = $('#username').val();
