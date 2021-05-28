@@ -25,7 +25,7 @@ app.get('/', function(req, res){
 
 app.use(routers);
 
-const port = 80;
+const port = process.env.PORT || 80;
 const server = http.createServer(app);
 server.on('upgrade', socket.upgrade(sessionParser));
 // server.on('upgrade', function(request, socket, head) {
