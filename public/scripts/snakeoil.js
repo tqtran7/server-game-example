@@ -203,7 +203,7 @@
     }
 
     console.log(location);
-    let endpoint = windown.location.host === 'localhost' ?
+    let endpoint = window.location.host === 'localhost' ?
       `ws://${window.location.host}`:
       `wss://${window.location.host}`;
     ws = new WebSocket(endpoint);
