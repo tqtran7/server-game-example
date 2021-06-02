@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <script src="https://kit.fontawesome.com/3d3f043bcd.js" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="/css/wordwolf.css">
+      <title>Game</title>
+  </head>
+  <body>
+
+    <screen id="loginscreen" class="loginscreen">
+      <login-form>
+        <label>User Name</label>
+        <input type="text" id="username">
+        <label>Room Code</label>
+        <input type="text" id="roomcode">
+        <button-group>
+          <button id="createbtn">Create Room</button>
+          <button id="joinbtn">Join Room</button>
+        </button-group>
+      </login-form>
+    </screen>
+
+    <screen id="gamescreen" style="display:none;">
+      <navbar>
+        <p id="roomcodedisplay">Room Code: ABCD</p>
+      </navbar>
+      <players id="players">
+        <player>
+          <name-container>
+            <name>Willy Pilly</name>
+          </name-container>
+          <words style="display:none;"></words>
+          <selected>
+            <input type="text" id=playersWord1>
+            <input type="text" id=playersWord2>
+            <button id="readybtn">Ready</button>
+          </selected>
+        </player>
+      </players>
+    </screen>
+
+  </body>
+  <script src="/scripts/jquery-3.6.0.min.js"></script>
+  <script src="/scripts/snakeoil.js"></script>
+</html>
