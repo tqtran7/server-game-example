@@ -17,5 +17,3 @@ game1.addWordPair(req2, ['unmath','math']);
 game1.selectWordPair();
 
 console.log(game1.toString());
-
-console.log(game1);
