@@ -66,11 +66,16 @@ class WordWolf {
     this.selectedWordPair = this.wordPairs.get(randUser);
   }
 
-  selectsWolf() {
+  selectWolf() {
     //randomly selects player and gives them the odd word out
-    random(players.length)
-
+    let players = Array.from(this.wordPairs.keys());
+    let rand = this.random(players.length);
+    this.wolf = players[rand];
   }
+
+//  assignWolfCard(){
+//    selectWolf()
+//  }
 
   jsonfy(map) {
     let json = {};

@@ -15,5 +15,6 @@ let req2 = { session: { scope: { username: 'Chancey is Dancy' } } };
 game1.addWordPair(req2, ['unmath','math']);
 
 game1.selectWordPair();
+game1.selectWolf();
 
-console.log(game1.toString());
+console.log(game1);
