@@ -14,7 +14,6 @@ game1.addWordPair(req1, ['science','not science']);
 let req2 = { session: { scope: { username: 'Chancey is Dancy' } } };
 game1.addWordPair(req2, ['unmath','math']);
 
-game1.selectWordPair();
-game1.selectWolf();
+game1.assignCards();
 
 console.log(game1);

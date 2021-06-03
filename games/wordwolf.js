@@ -3,6 +3,8 @@ const socket = require('../middlewares/socket');
 
 class WordWolf {
 
+  //homer work: give out words to proper person, wolf card for wolf and other word for other people
+
   /*
     0a. every player needs a name card
     0b. have custamizable timer
@@ -46,6 +48,7 @@ class WordWolf {
   constructor(room) {
     this.room = room;
     this.wordPairs = new Map();
+    this.assignedCards = new Map();
   }
 
   random(n) {
@@ -73,9 +76,33 @@ class WordWolf {
     this.wolf = players[rand];
   }
 
-//  assignWolfCard(){
-//    selectWolf()
-//  }
+// will addition start
+  randomizePair(){
+    selectWordPair();
+    let rand = this.random(1);
+    this.wolfCard = this.selectedWordPair[rand];
+    if (rand==0){
+      this.nonWolfCard = this.selectedWordPair[1];
+    }
+    else {
+      this.nonWolfCard = this.selectedWordPair[0];
+    }
+  }
+
+  assignCards(){
+    selectWolf()
+    randomizePair()
+    for (i=0; i>players.length; i++;){
+      //bassically we will check wether or not the player is the wolf and if they arent we add them to the list with the non wolf card
+      if (players[i]==this.wolf){
+        this.assignedCards.set(players[i], this.wolfCard)
+      }
+      else {
+        this.assignedCards.set(players[i], this.nonWolfCard)
+      }
+    }
+  }
+// will addition end
 
   jsonfy(map) {
     let json = {};
