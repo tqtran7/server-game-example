@@ -78,10 +78,10 @@ class WordWolf {
 
 // will addition start
   randomizePair(){
-    selectWordPair();
-    let rand = this.random(1);
+    this.selectWordPair();
+    let rand = this.random(2);
     this.wolfCard = this.selectedWordPair[rand];
-    if (rand==0){
+    if (rand == 0){
       this.nonWolfCard = this.selectedWordPair[1];
     }
     else {
@@ -90,17 +90,17 @@ class WordWolf {
   }
 
   assignCards(){
-    selectWolf()
-    randomizePair()
-    for (i=0;  i < player.length; i++;){
+    this.selectWolf();
+    this.randomizePair();
+    this.wordPairs.forEach((wordPair, username) => {
       //bassically we will check wether or not the player is the wolf and if they arent we add them to the list with the non wolf card
-      if (players[i]==this.wolf){
-        this.assignedCards.set(players[i], this.wolfCard)
+      if (username == this.wolf){
+        this.assignedCards.set(username, this.wolfCard);
       }
       else {
-        this.assignedCards.set(players[i], this.nonWolfCard)
+        this.assignedCards.set(username, this.nonWolfCard);
       }
-    }
+    }); 
   }
 // will addition end
 

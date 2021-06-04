@@ -5,6 +5,7 @@ const Room = require('../models/room');
 const room = new Room('Willy Pilly');
 room.addUser('Darin Garen');
 room.addUser('Chancey is Dancy');
+room.addUser('Uncle Thai');
 
 let game1 = new WordWolf(room);
 
@@ -13,6 +14,12 @@ game1.addWordPair(req1, ['science','not science']);
 
 let req2 = { session: { scope: { username: 'Chancey is Dancy' } } };
 game1.addWordPair(req2, ['unmath','math']);
+
+let req3 = { session: { scope: { username: 'Uncle Thai' } } };
+game1.addWordPair(req3, ['history','ahistory']);
+
+let req4 = { session: { scope: { username: 'Willy Pilly' } } };
+game1.addWordPair(req4, ['runeterra','runterra']);
 
 game1.assignCards();
 
