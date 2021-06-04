@@ -92,7 +92,7 @@ class WordWolf {
   assignCards(){
     selectWolf()
     randomizePair()
-    for (i=0; i>players.length; i++;){
+    for (i=0;  i < player.length; i++;){
       //bassically we will check wether or not the player is the wolf and if they arent we add them to the list with the non wolf card
       if (players[i]==this.wolf){
         this.assignedCards.set(players[i], this.wolfCard)
