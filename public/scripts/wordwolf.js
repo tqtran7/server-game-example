@@ -25,27 +25,24 @@
           <name>${username}</name>
         </name-container>
         <words style="display:none;"></words>
-        <selected>
-          <p>???</p>
-          <p>???</p>
-          <p class="timer" style="display:none;">30s</p>
-        </selected>
       </player>`);
     }
   }
 
   $('#createbtn').click(function() {
+    let gamename = 'wordwolf';
     let username = $('#username').val();
     $.ajax({
       method: 'POST',
       url: '/room/create',
       json: true,
-      data: { username },
+      data: { username, gamename },
       success: (data) => {
         console.log(data);
         disableLoginForm(data);
         updateUserList(data);
         connectWebsocket();
+        startGame();
       },
       error: (error) => {
         console.log(error.responseJSON);
@@ -74,8 +71,28 @@
   });
 
   $('#startbtn').click(function() {
+    $('#startbtn').prop("disabled", true);
     let roomcode = $('#roomcode').val();
-    let gamename = 'snakeoil';
+    let data = JSON.stringify({
+      roomcode: roomcode,
+      action: 'assignCards',
+    });
+    console.log(data);
+    $.ajax({
+      method: 'POST',
+      url: '/room/action',
+      data: data,
+      dataType: 'json',
+      contentType:"application/json",
+      error: (error) => {
+        console.log(error.responseJSON);
+      }
+    });
+  });
+
+  function startGame(){
+    let roomcode = $('#roomcode').val();
+    let gamename = 'wordwolf';
     $.ajax({
       method: 'POST',
       url: '/room/start',
@@ -85,15 +102,18 @@
         console.log(error.responseJSON);
       }
     });
-  });
+  }
 
-  $('#pitchbtn').click(function() {
-    $('#pitchbtn').prop("disabled", true);
+  $('#readybtn').click(function() {
+    $('#readybtn').prop("disabled", true);
     let roomcode = $('#roomcode').val();
+    let word1 = $('#playersWord1').val();
+    let word2 = $('#playersWord2').val();
+    let words = [word1, word2];
     let data = JSON.stringify({
       roomcode: roomcode,
-      action: 'pitch',
-      actionData: selectedCards,
+      action: 'addWordPair',
+      actionData: words,
     });
     console.log(data);
     $.ajax({
@@ -109,7 +129,7 @@
   });
 
   function drawMyCards(cards) {
-    
+
     let username = $('#username').val();
     $(`#${username} selected`).hide();
     let words = $(`#${username} words`);
@@ -119,7 +139,7 @@
     selectedCards = [];
 
     for (let card of cards) {
-      
+
       let p = document.createElement('p');
       p.innerHTML = card;
       words.append(p);
@@ -137,7 +157,7 @@
 
           // only two cards can be selected at a time
           // force remove the oldest selected one
-          if (selectedCards.length >= 2) { 
+          if (selectedCards.length >= 2) {
             let unselected = selectedCards.shift();
             selectedMap[unselected].selected = false;
             selectedMap[unselected].element.className = '';
@@ -158,7 +178,7 @@
         }
 
         console.log(selectedCards);
-      }); 
+      });
     }
   }
 
@@ -198,7 +218,7 @@
 
   let ws;
   function connectWebsocket() {
-    
+
     if (ws) {
       ws.onerror = ws.onopen = ws.onclose = null;
       ws.close();
@@ -218,7 +238,7 @@
 
     ws.onmessage = function(res) {
       console.log(res.data);
-      try { 
+      try {
         let detail = JSON.parse(res.data);
         if (typeof detail === 'object') {
           let event = new CustomEvent(detail.event, { detail });
@@ -241,7 +261,7 @@
       console.log(`${event.detail.event} Event Triggered!`);
       let data = event.detail.data;
       console.log(data);
-      
+
       $('#startbtn').prop("disabled", true);
       $('#pitchbtn').prop("disabled", false);
 
@@ -252,12 +272,10 @@
       }
     });
 
-    ws.addEventListener('OnPlayerPitch', (event) => {
+    ws.addEventListener('OnAssignCards', (event) => {
       console.log(`${event.detail.event} Event Triggered!`);
-      let player = event.detail.data;
-      console.log(player);
-      drawSelected(player);
-      startTimer(player);
+      let word = event.detail.data;
+      console.log(word);
     });
   };
 
@@ -267,7 +285,7 @@
       console.log('No WebSocket connection');
       return;
     }
-    
+
     let message = $('#messages').val();
     ws.send(message);
     $('#messagebox').html('');

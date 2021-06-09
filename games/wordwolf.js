@@ -90,19 +90,29 @@ class WordWolf {
   }
 
   assignCards(){
+    this.selectWordPair();
     this.selectWolf();
     this.randomizePair();
     this.wordPairs.forEach((wordPair, username) => {
       //bassically we will check wether or not the player is the wolf and if they arent we add them to the list with the non wolf card
+      let word = this.nonWolfCard;
       if (username == this.wolf){
-        this.assignedCards.set(username, this.wolfCard);
+        word = this.wolfCard;
       }
-      else {
-        this.assignedCards.set(username, this.nonWolfCard);
-      }
-    }); 
+
+      this.assignedCards.set(username, word);
+      let userid = this.room.getUser(username).getId();
+      socket.broadcast('OnAssignCards', userid, {word});
+    });
   }
 // will addition end
+
+  canStart(){
+    return {
+      canStart: this.room.users.size >= 3,
+      errorMessage: 'Not Enough Players!',
+    };
+  }
 
   jsonfy(map) {
     let json = {};
@@ -117,6 +127,10 @@ class WordWolf {
       pairs: this.wordPairs,
       selected: this.selectedWordPair,
     };
+  }
+
+  broadcast(){
+
   }
 
 }

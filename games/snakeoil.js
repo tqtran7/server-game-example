@@ -11,6 +11,13 @@ class SnakeOil {
     this.load();
   }
 
+  canStart(){
+    return {
+      canStart: this.room.users.size >= 3,
+      errorMessage: 'Not Enough Players!',
+    };
+  }
+
   load() {
 
     // Pick two random cards for customer
@@ -112,8 +119,8 @@ class SnakeOil {
 
   jsonfy(map) {
     let json = {};
-    map.forEach((value, key) => { 
-      json[key] = value.cards; 
+    map.forEach((value, key) => {
+      json[key] = value.cards;
     });
     return json;
   }
@@ -124,7 +131,7 @@ class SnakeOil {
       players: this.jsonfy(this.players),
     };
   }
-  
+
 }
 
 module.exports = SnakeOil;

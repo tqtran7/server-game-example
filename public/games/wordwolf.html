@@ -25,24 +25,19 @@
 
     <screen id="gamescreen" style="display:none;">
       <navbar>
+        <button id="startbtn">Start</button>
         <p id="roomcodedisplay">Room Code: ABCD</p>
       </navbar>
-      <players id="players">
-        <player>
-          <name-container>
-            <name>Willy Pilly</name>
-          </name-container>
-          <words style="display:none;"></words>
-          <selected>
-            <input type="text" id=playersWord1>
-            <input type="text" id=playersWord2>
-            <button id="readybtn">Ready</button>
-          </selected>
-        </player>
+      <submission>
+        <input type="text" id="playersWord1">
+        <input type="text" id="playersWord2">
+        <button id="readybtn">Ready</button>
+      </submission>
+      <players id="players" style="display:none;">
       </players>
     </screen>
 
   </body>
   <script src="/scripts/jquery-3.6.0.min.js"></script>
-  <script src="/scripts/snakeoil.js"></script>
+  <script src="/scripts/wordwolf.js"></script>
 </html>

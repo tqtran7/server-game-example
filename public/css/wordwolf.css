@@ -99,6 +99,18 @@ navbar button {
   background: #0090ed;
   background: linear-gradient(180deg, #0090ed 0%, #00a8e3 100%);
 }
+#gamescreen submission {
+  align-self: center;
+  width: 40%;
+  margin-left: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#gamescreen submission input {
+  background: #766133;
+  width: 70%;
+}
 #gamescreen players {
   display: flex;
   flex-direction: row;
@@ -158,16 +170,5 @@ navbar button {
   color: white;
   text-shadow: 2px 2px black;
 }
-#gamescreen players player selected {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1em;
-}
-#gamescreen players player selected .timer {
-  color: #b32e2e;
-}
 
-/*# sourceMappingURL=snakeoil.css.map */
+/*# sourceMappingURL=wordwolf.css.map */
