@@ -78,7 +78,6 @@ class WordWolf {
 
 // will addition start
   randomizePair(){
-    this.selectWordPair();
     let rand = this.random(2);
     this.wolfCard = this.selectedWordPair[rand];
     if (rand == 0){
@@ -89,7 +88,7 @@ class WordWolf {
     }
   }
 
-  assignCards(){
+  broadcast(){
     this.selectWordPair();
     this.selectWolf();
     this.randomizePair();
@@ -102,16 +101,23 @@ class WordWolf {
 
       this.assignedCards.set(username, word);
       let userid = this.room.getUser(username).getId();
+      console.log(this.assignedCards, userid, {word});
       socket.broadcast('OnAssignCards', userid, {word});
     });
+    console.log(this.selectedWordPair);
+    console.log(this.wolf);
+    console.log(this.wolfCard);
+    console.log(this.nonWolfCard);
   }
 // will addition end
 
   canStart(){
-    return {
+    let condition = {
       canStart: this.room.users.size >= 3,
       errorMessage: 'Not Enough Players!',
     };
+    console.log(condition);
+    return condition;
   }
 
   jsonfy(map) {
@@ -127,10 +133,6 @@ class WordWolf {
       pairs: this.wordPairs,
       selected: this.selectedWordPair,
     };
-  }
-
-  broadcast(){
-
   }
 
 }

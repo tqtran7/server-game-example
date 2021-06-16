@@ -42,7 +42,7 @@
         disableLoginForm(data);
         updateUserList(data);
         connectWebsocket();
-        startGame();
+        //startGame();
       },
       error: (error) => {
         console.log(error.responseJSON);
@@ -75,12 +75,12 @@
     let roomcode = $('#roomcode').val();
     let data = JSON.stringify({
       roomcode: roomcode,
-      action: 'assignCards',
+      gamename: 'wordwolf',
     });
     console.log(data);
     $.ajax({
       method: 'POST',
-      url: '/room/action',
+      url: '/room/start',
       data: data,
       dataType: 'json',
       contentType:"application/json",
@@ -89,20 +89,6 @@
       }
     });
   });
-
-  function startGame(){
-    let roomcode = $('#roomcode').val();
-    let gamename = 'wordwolf';
-    $.ajax({
-      method: 'POST',
-      url: '/room/start',
-      json: true,
-      data: { gamename, roomcode },
-      error: (error) => {
-        console.log(error.responseJSON);
-      }
-    });
-  }
 
   $('#readybtn').click(function() {
     $('#readybtn').prop("disabled", true);
@@ -127,77 +113,6 @@
       }
     });
   });
-
-  function drawMyCards(cards) {
-
-    let username = $('#username').val();
-    $(`#${username} selected`).hide();
-    let words = $(`#${username} words`);
-    words.show();
-    words.empty();
-    selectedMap = {};
-    selectedCards = [];
-
-    for (let card of cards) {
-
-      let p = document.createElement('p');
-      p.innerHTML = card;
-      words.append(p);
-
-      // cards are not selected by default
-      selectedMap[card] = { selected: false, element: p };
-
-      p.addEventListener('click', ()=>{
-
-        // user toggled the selection state of card
-        selectedMap[card].selected = !selectedMap[card].selected;
-
-        // user clicked on a card and selected it
-        if (selectedMap[card].selected) {
-
-          // only two cards can be selected at a time
-          // force remove the oldest selected one
-          if (selectedCards.length >= 2) {
-            let unselected = selectedCards.shift();
-            selectedMap[unselected].selected = false;
-            selectedMap[unselected].element.className = '';
-          }
-
-          // quota hasnt been met
-          // just keep adding until we get there
-          selectedCards.push(card);
-          selectedMap[card].element.className = 'selected';
-        }
-
-        // user clicked on a selected item to unselect it
-        // remove it from selected cards
-        else {
-          selectedMap[card].element.className = '';
-          let index = selectedCards.indexOf(card);
-          if (index >= 0) { selectedCards.splice(index, 1); }
-        }
-
-        console.log(selectedCards);
-      });
-    }
-  }
-
-  function drawCustomer(customer) {
-    let selector = `#${customer.name}`;
-    $(selector).addClass('customer');
-    drawSelected(customer);
-  }
-
-  function drawSelected(player) {
-    let selector = `#${player.name}`;
-    $(`${selector} words`).hide();
-    $(`${selector} selected`).show();
-    let cards = $(`${selector} selected p`).toArray();
-    if (cards.length) {
-      cards[0].innerHTML = player.cards[0];
-      cards[1].innerHTML = player.cards[1];
-    }
-  }
 
   function startTimer(player) {
     let time = 30;

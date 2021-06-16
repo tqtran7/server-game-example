@@ -95,6 +95,7 @@ function start(req, res) {
     if (rooms.has(roomcode)) {
       let room = rooms.get(roomcode);
       let {canStart, message} = room.game.canStart();
+      console.log("can start", canStart);
       if (canStart) {
         room.game.broadcast();
         res.send({ status: 'ok' });
