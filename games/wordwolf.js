@@ -102,7 +102,8 @@ class WordWolf {
       this.assignedCards.set(username, word);
       let userid = this.room.getUser(username).getId();
       console.log(this.assignedCards, userid, {word});
-      socket.broadcast('OnAssignCards', userid, {word});
+      let players = Array.from(this.wordPairs.keys());
+      socket.broadcast('OnAssignCards', [userid], {word}, [players]);
     });
     console.log(this.selectedWordPair);
     console.log(this.wolf);

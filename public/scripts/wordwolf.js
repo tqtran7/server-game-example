@@ -115,9 +115,8 @@
   });
 
   function startTimer(player) {
-    let time = 30;
-    let selector = `#${player.name}`;
-    let timerDom = $(`${selector} selected .timer`);
+    let time = 300;
+    let timerDom = $('#gamescreen > navbar > timer');
     timerDom.show();
     let timer = setInterval(function() {
       time--;
@@ -125,7 +124,7 @@
       console.log(`Timer @${time}`);
       if (time === 0) {
         clearInterval(timer);
-        timerDom.html("Pitched!");
+        timerDom.html("Bye Felicia!");
         console.log(`Timer completed!`);
       }
     }, 1000);
@@ -188,9 +187,18 @@
     });
 
     ws.addEventListener('OnAssignCards', (event) => {
+      $('#startbtn').prop("disabled", true);
+      $('#wordPairForm').hide();
+      $('#players').show();
       console.log(`${event.detail.event} Event Triggered!`);
-      let word = event.detail.data;
-      console.log(word);
+      let data = event.detail.data;
+      console.log(data);
+      //append.div.word
+      $('#gamescreen > word').html(data.word);
+      startTimer(data.userid);
+      for (let i = 0; i < data.players.length; i++){
+        $('#gamescreen > players').html(data.players[i]);
+      }
     });
   };
 
