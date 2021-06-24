@@ -45,10 +45,27 @@ class WordWolf {
       9a. underneath the win / loss screen will be the 2 words
   */
 
+/*
+map={key = value}
+key=players
+value=votes they have
+*/
+
   constructor(room) {
     this.room = room;
     this.wordPairs = new Map();
     this.assignedCards = new Map();
+    this.tallyMap = new Map();
+  }
+
+  tally(req, player){
+    let value = 1;
+    if (this.tallyMap.has(player)) {
+      value += this.tallyMap.get(player);
+    }
+    this.tallyMap.set(player, value);
+    console.log(player + " is at a cool " + value + " votes!");
+    socket.broadcast('OnTallyVote', player, value);
   }
 
   random(n) {
@@ -102,8 +119,7 @@ class WordWolf {
       this.assignedCards.set(username, word);
       let userid = this.room.getUser(username).getId();
       console.log(this.assignedCards, userid, {word});
-      let players = Array.from(this.wordPairs.keys());
-      socket.broadcast('OnAssignCards', [userid], {word}, [players]);
+      socket.broadcast('OnAssignCards', [userid], {word});
     });
     console.log(this.selectedWordPair);
     console.log(this.wolf);

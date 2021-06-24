@@ -177,7 +177,7 @@ navbar {
       display: flex;
       flex-direction: column;
       width: 200px;
-      min-height: 10px;
+      min-height: 66px;
       color: black;
       background: $primary-color;
       border: 4px solid black;
@@ -205,6 +205,10 @@ navbar {
           vertical-align: middle;
           border: 3px solid black;
           display: inline-table;
+        }
+
+        button {
+          width: 100%;
         }
       }
 
