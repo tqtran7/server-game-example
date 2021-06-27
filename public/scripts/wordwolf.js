@@ -35,6 +35,7 @@
       button.addEventListener('click', function() {
         tally(username);
       });
+      words.id = username;
       namecontainer.append(button);
       player.append(namecontainer);
       player.append(words);
@@ -197,7 +198,7 @@ g.setAttribute("id", "Div1");
   });
 
   function startTimer(player) {
-    let time = 10;
+    let time = 300;
     let timerDom = $('#gamescreen > navbar > timer');
     timerDom.show();
     let timer = setInterval(function() {
@@ -251,9 +252,12 @@ g.setAttribute("id", "Div1");
 
     ws.addEventListener('OnTallyVote', (event) => {
       console.log(`${event.detail.event} Event Triggered!`);
-      let data = event.detail.data;
-      console.log(data);
-      console.log('why dis no work');
+      let tallyMap = event.detail.data;
+      console.log(tallyMap);
+      for (let key in tallyMap) {
+        let value = tallyMap[key];
+        $(`#${key}`).html(value);
+      }
     });
 
     ws.addEventListener('OnUsersUpdate', (event) => {

@@ -8,7 +8,6 @@ class SnakeOil {
 
   constructor(room) {
     this.room = room;
-    this.load();
   }
 
   canStart(){
@@ -45,6 +44,7 @@ class SnakeOil {
   }
 
   broadcast() {
+    this.load();
     let customerName = this.customer.getName();
     let customerInfo = this.players.get(customerName);
     this.players.forEach((playerInfo, playerName) => {

@@ -63,9 +63,13 @@ value=votes they have
     if (this.tallyMap.has(player)) {
       value += this.tallyMap.get(player);
     }
+    console.log(player,value);
     this.tallyMap.set(player, value);
-    console.log(player + " is at a cool " + value + " votes!");
-    socket.broadcast('OnTallyVote', player, value);
+    let sids = this.room.getUserIds();
+    let json = this.jsonfy(this.tallyMap);
+    console.log(this.tallyMap);
+    console.log(json);
+    socket.broadcast('OnTallyVote', sids, json);
   }
 
   random(n) {
@@ -140,7 +144,7 @@ value=votes they have
   jsonfy(map) {
     let json = {};
     map.forEach((value, key) => {
-      json[key] = value.cards;
+      json[key] = value;
     });
     return json;
   }
