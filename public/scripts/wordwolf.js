@@ -19,33 +19,111 @@
   function updateUserList(data) {
     $('#players').empty();
     for (let username of data.users) {
-      $('#players').append(`
-      <player id="${username}">
-        <name-container>
-          <name>${username}</name>
-        </name-container>
-        <words style="display:none;"></words>
-        <selected>
-          <p>???</p>
-          <p>???</p>
-          <p class="timer" style="display:none;">30s</p>
-        </selected>
-      </player>`);
+      // $('#players').append(`
+      // <player id="${username}">
+      //   <name-container>
+      //     <button disabled>${username}</button>
+      //   </name-container>
+      //   <words style="display:none;"></words>
+      // </player>`);
+      let player = document.createElement('player');
+      let namecontainer = document.createElement('name-container');
+      let button = document.createElement('button');
+      let words = document.createElement('words');
+      button.innerHTML = username;
+      button.setAttribute('disabled', true);
+      button.addEventListener('click', function() {
+        tally(username);
+      });
+      words.id = username;
+      namecontainer.append(button);
+      player.append(namecontainer);
+      player.append(words);
+      $('#players').append(player);
     }
   }
 
+/*
+ homer works:
+
+  1. Disable name buttons once voted
+  2. Ensure that words are not blank and not the same
+
+  3. Send a websocket event when some one vote
+  4. Display this vote number next to names
+  hint: trim()
+
+  g = document.createElement('div');
+g.setAttribute("id", "Div1");
+
+*/
+
+  function tally(username) {
+    $('#players > player > name-container > button').prop("disabled", true);
+    let roomcode = $('#roomcode').val();
+    let data = JSON.stringify({
+      roomcode: roomcode,
+      action: 'tally',
+      actionData: username,
+    });
+    console.log(data);
+    $.ajax({
+      method: 'POST',
+      url: '/room/action',
+      data: data,
+      dataType: 'json',
+      contentType:"application/json",
+      error: (error) => {
+        console.log(error.responseJSON);
+      }
+    });
+  }
+
+  //on click on name: disable all name button, tally()
+
+  /*
+  function createButtons(domId, numberOfButtons) {
+        for (let n = 0; n < numberOfButtons; n++) {
+          // domId.innerHTML += `<button onclick="dosomething()">Button ${n}</button>`;
+          // $(domId).append(`<button onclick="dosomething()">Button ${n}</button>`);
+          let button = document.createElement('button');
+          button.innerHTML = `Button ${n}`;
+          button.addEventListener('click', function() {
+            dosomething(n);
+          });
+          $(domId).append(button);
+        }
+      }
+
+
+      let button = document.createElement('button');
+       button.innerHTML = `Button ${n}`;
+       button.addEventListener('click', function() {
+         dosomething(n);
+       });
+
+       let span = document.createElement('span');
+       let div = document.createElement('div');
+       div.append(span);
+       div.append(button);
+
+       $(domId).append(div);
+  */
+
   $('#createbtn').click(function() {
+    let gamename = 'wordwolf';
     let username = $('#username').val();
     $.ajax({
       method: 'POST',
       url: '/room/create',
       json: true,
-      data: { username },
+      data: { username, gamename },
       success: (data) => {
         console.log(data);
         disableLoginForm(data);
         updateUserList(data);
         connectWebsocket();
+        //startGame();
       },
       error: (error) => {
         console.log(error.responseJSON);
@@ -74,31 +152,16 @@
   });
 
   $('#startbtn').click(function() {
-    let roomcode = $('#roomcode').val();
-    let gamename = 'snakeoil';
-    $.ajax({
-      method: 'POST',
-      url: '/room/start',
-      json: true,
-      data: { gamename, roomcode },
-      error: (error) => {
-        console.log(error.responseJSON);
-      }
-    });
-  });
-
-  $('#pitchbtn').click(function() {
-    $('#pitchbtn').prop("disabled", true);
+    $('#startbtn').prop("disabled", true);
     let roomcode = $('#roomcode').val();
     let data = JSON.stringify({
       roomcode: roomcode,
-      action: 'pitch',
-      actionData: selectedCards,
+      gamename: 'wordwolf',
     });
     console.log(data);
     $.ajax({
       method: 'POST',
-      url: '/room/action',
+      url: '/room/start',
       data: data,
       dataType: 'json',
       contentType:"application/json",
@@ -108,81 +171,35 @@
     });
   });
 
-  function drawMyCards(cards) {
-    
-    let username = $('#username').val();
-    $(`#${username} selected`).hide();
-    let words = $(`#${username} words`);
-    words.show();
-    words.empty();
-    selectedMap = {};
-    selectedCards = [];
-
-    for (let card of cards) {
-      
-      let p = document.createElement('p');
-      p.innerHTML = card;
-      words.append(p);
-
-      // cards are not selected by default
-      selectedMap[card] = { selected: false, element: p };
-
-      p.addEventListener('click', ()=>{
-
-        // user toggled the selection state of card
-        selectedMap[card].selected = !selectedMap[card].selected;
-
-        // user clicked on a card and selected it
-        if (selectedMap[card].selected) {
-
-          // only two cards can be selected at a time
-          // force remove the oldest selected one
-          if (selectedCards.length >= 2) { 
-            let unselected = selectedCards.shift();
-            selectedMap[unselected].selected = false;
-            selectedMap[unselected].element.className = '';
-          }
-
-          // quota hasnt been met
-          // just keep adding until we get there
-          selectedCards.push(card);
-          selectedMap[card].element.className = 'selected';
+  $('#readybtn').click(function() {
+    let roomcode = $('#roomcode').val();
+    let word1 = $('#playersWord1').val().trim();
+    let word2 = $('#playersWord2').val().trim();
+    let words = [word1, word2];
+    if (!(word1 == word2) && !(word1 == "") && !(word2 == "")){
+      $('#readybtn').prop("disabled", true);
+      let data = JSON.stringify({
+        roomcode: roomcode,
+        action: 'addWordPair',
+        actionData: words,
+      });
+      console.log(data);
+      $.ajax({
+        method: 'POST',
+        url: '/room/action',
+        data: data,
+        dataType: 'json',
+        contentType:"application/json",
+        error: (error) => {
+          console.log(error.responseJSON);
         }
-
-        // user clicked on a selected item to unselect it
-        // remove it from selected cards
-        else {
-          selectedMap[card].element.className = '';
-          let index = selectedCards.indexOf(card);
-          if (index >= 0) { selectedCards.splice(index, 1); }
-        }
-
-        console.log(selectedCards);
-      }); 
+      });
     }
-  }
-
-  function drawCustomer(customer) {
-    let selector = `#${customer.name}`;
-    $(selector).addClass('customer');
-    drawSelected(customer);
-  }
-
-  function drawSelected(player) {
-    let selector = `#${player.name}`;
-    $(`${selector} words`).hide();
-    $(`${selector} selected`).show();
-    let cards = $(`${selector} selected p`).toArray();
-    if (cards.length) {
-      cards[0].innerHTML = player.cards[0];
-      cards[1].innerHTML = player.cards[1];
-    }
-  }
+  });
 
   function startTimer(player) {
-    let time = 30;
-    let selector = `#${player.name}`;
-    let timerDom = $(`${selector} selected .timer`);
+    let time = 300;
+    let timerDom = $('#gamescreen > navbar > timer');
     timerDom.show();
     let timer = setInterval(function() {
       time--;
@@ -190,7 +207,8 @@
       console.log(`Timer @${time}`);
       if (time === 0) {
         clearInterval(timer);
-        timerDom.html("Pitched!");
+        $('#players > player > name-container > button').prop("disabled", false);
+        timerDom.html("Bye Felicia!");
         console.log(`Timer completed!`);
       }
     }, 1000);
@@ -198,7 +216,7 @@
 
   let ws;
   function connectWebsocket() {
-    
+
     if (ws) {
       ws.onerror = ws.onopen = ws.onclose = null;
       ws.close();
@@ -218,7 +236,7 @@
 
     ws.onmessage = function(res) {
       console.log(res.data);
-      try { 
+      try {
         let detail = JSON.parse(res.data);
         if (typeof detail === 'object') {
           let event = new CustomEvent(detail.event, { detail });
@@ -232,6 +250,16 @@
       console.log(`${event.detail.event} Event Triggered!`);
     });
 
+    ws.addEventListener('OnTallyVote', (event) => {
+      console.log(`${event.detail.event} Event Triggered!`);
+      let tallyMap = event.detail.data;
+      console.log(tallyMap);
+      for (let key in tallyMap) {
+        let value = tallyMap[key];
+        $(`#${key}`).html(value);
+      }
+    });
+
     ws.addEventListener('OnUsersUpdate', (event) => {
       console.log(`${event.detail.event} Event Triggered!`);
       updateUserList(event.detail.data);
@@ -241,7 +269,7 @@
       console.log(`${event.detail.event} Event Triggered!`);
       let data = event.detail.data;
       console.log(data);
-      
+
       $('#startbtn').prop("disabled", true);
       $('#pitchbtn').prop("disabled", false);
 
@@ -252,12 +280,16 @@
       }
     });
 
-    ws.addEventListener('OnPlayerPitch', (event) => {
+    ws.addEventListener('OnAssignCards', (event) => {
+      $('#startbtn').prop("disabled", true);
+      $('#wordPairForm').hide();
+      $('#players').show();
       console.log(`${event.detail.event} Event Triggered!`);
-      let player = event.detail.data;
-      console.log(player);
-      drawSelected(player);
-      startTimer(player);
+      let data = event.detail.data;
+      console.log(data);
+      //append.div.word
+      $('#gamescreen > word').html(data.word);
+      startTimer(data.userid);
     });
   };
 
@@ -267,7 +299,7 @@
       console.log('No WebSocket connection');
       return;
     }
-    
+
     let message = $('#messages').val();
     ws.send(message);
     $('#messagebox').html('');

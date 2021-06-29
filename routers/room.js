@@ -29,13 +29,16 @@ function getRoom(roomcode) {
 
 /**
  * User creates a room and becomes host.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 function create(req, res) {
   try {
     let username = req.body.username;
+    let gamename = req.body.gamename;
     let room = new Room(username);
+    let Game = require(`../games/${gamename}`);
+    room.game = new Game(room);
     if (!req.session.scope) { req.session.scope = {}; }
     req.session.scope.id  = room.getUser(username).getId();
     req.session.scope.username  = username;
@@ -51,8 +54,8 @@ function create(req, res) {
 
 /**
  * User joins a room via roomcode.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 function join(req, res) {
   try {
@@ -66,8 +69,8 @@ function join(req, res) {
       req.session.scope.username = username;
       req.session.scope.roomcode = room.getRoomCode();
       socket.broadcast(
-        'OnUsersUpdate', 
-        room.getUserIds(), 
+        'OnUsersUpdate',
+        room.getUserIds(),
         room.toString());
       res.send(room.toString());
     }
@@ -82,8 +85,8 @@ function join(req, res) {
 
 /**
  * Start a game.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 function start(req, res) {
   try {
@@ -91,14 +94,14 @@ function start(req, res) {
     let gamename = req.body.gamename;
     if (rooms.has(roomcode)) {
       let room = rooms.get(roomcode);
-      if (room.users.size < 3) {
-        res.status(400).send({ message: 'Not enough players!' });
-      }
-      else {
-        let Game = require(`../games/${gamename}`);
-        room.game = new Game(room);
+      let {canStart, message} = room.game.canStart();
+      console.log("can start", canStart);
+      if (canStart) {
         room.game.broadcast();
         res.send({ status: 'ok' });
+      }
+      else {
+        res.status(400).send({ message });
       }
     }
     else {
@@ -112,8 +115,8 @@ function start(req, res) {
 
 /**
  * Pass RPC action to the game.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
  function action(req, res) {
   try {
@@ -141,7 +144,7 @@ function start(req, res) {
  * When a user leaves the room.
  * Get rid of their session and socket.
  * If user is a host, promote another user to host.
- * @param {} req 
+ * @param {} req
  * @param {*} res
  */
 function leave(req, res) {
@@ -167,8 +170,8 @@ function leave(req, res) {
         // remove user from room
         room.users.delete(username);
         socket.broadcast(
-          'OnUsersUpdate', 
-          room.getUserIds(), 
+          'OnUsersUpdate',
+          room.getUserIds(),
           room.toString());
       }
 
@@ -183,4 +186,3 @@ function leave(req, res) {
     console.log(e);
   }
 }
-

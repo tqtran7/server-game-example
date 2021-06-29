@@ -45,10 +45,31 @@ class WordWolf {
       9a. underneath the win / loss screen will be the 2 words
   */
 
+/*
+map={key = value}
+key=players
+value=votes they have
+*/
+
   constructor(room) {
     this.room = room;
     this.wordPairs = new Map();
     this.assignedCards = new Map();
+    this.tallyMap = new Map();
+  }
+
+  tally(req, player){
+    let value = 1;
+    if (this.tallyMap.has(player)) {
+      value += this.tallyMap.get(player);
+    }
+    console.log(player,value);
+    this.tallyMap.set(player, value);
+    let sids = this.room.getUserIds();
+    let json = this.jsonfy(this.tallyMap);
+    console.log(this.tallyMap);
+    console.log(json);
+    socket.broadcast('OnTallyVote', sids, json);
   }
 
   random(n) {
@@ -78,7 +99,6 @@ class WordWolf {
 
 // will addition start
   randomizePair(){
-    this.selectWordPair();
     let rand = this.random(2);
     this.wolfCard = this.selectedWordPair[rand];
     if (rand == 0){
@@ -89,25 +109,42 @@ class WordWolf {
     }
   }
 
-  assignCards(){
+  broadcast(){
+    this.selectWordPair();
     this.selectWolf();
     this.randomizePair();
     this.wordPairs.forEach((wordPair, username) => {
       //bassically we will check wether or not the player is the wolf and if they arent we add them to the list with the non wolf card
+      let word = this.nonWolfCard;
       if (username == this.wolf){
-        this.assignedCards.set(username, this.wolfCard);
+        word = this.wolfCard;
       }
-      else {
-        this.assignedCards.set(username, this.nonWolfCard);
-      }
-    }); 
+
+      this.assignedCards.set(username, word);
+      let userid = this.room.getUser(username).getId();
+      console.log(this.assignedCards, userid, {word});
+      socket.broadcast('OnAssignCards', [userid], {word});
+    });
+    console.log(this.selectedWordPair);
+    console.log(this.wolf);
+    console.log(this.wolfCard);
+    console.log(this.nonWolfCard);
   }
 // will addition end
+
+  canStart(){
+    let condition = {
+      canStart: this.room.users.size >= 3,
+      errorMessage: 'Not Enough Players!',
+    };
+    console.log(condition);
+    return condition;
+  }
 
   jsonfy(map) {
     let json = {};
     map.forEach((value, key) => {
-      json[key] = value.cards;
+      json[key] = value;
     });
     return json;
   }

@@ -1,0 +1,250 @@
+
+@font-face {
+  font-family: FredokaOne;
+  src: url('../fonts/FredokaOne-Regular.ttf')
+}
+
+$primary-color: #a69674;
+$customer-color: #a6924e;
+$background-color: #5e5c51;
+$input-color: #1f1b29;
+$primary-gradient: linear-gradient(rgb(237, 230, 0) 0%, rgb(227, 124, 0) 100%);
+
+html {
+  display: grid;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  background: $background-color;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid black;
+  border-radius: 12px;
+  // background: #0090ed;
+  // background: linear-gradient(180deg, #0090ed 0%, #00a8e3 100%);
+  background: $primary-gradient;
+}
+
+.loginscreen {
+
+  // background: #16222e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid black;
+
+  login-form {
+
+    color: white;
+    font-family: FredokaOne;
+    display: flex;
+    flex-direction: column;
+    line-height: 32px;
+
+    label {
+      font-size: large;
+      // color: #0090ed;
+      color: #fee571;
+    }
+
+    input {
+      color: white;
+      // background: #1b2629;
+      background: $input-color;
+      border: 1px solid gray;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin-top: 15px;
+      border: 2px solid black;
+      border-radius: 12px;
+      font-size: larger;
+    }
+
+  }
+
+}
+
+navbar {
+
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  background: #a69674;
+  border-bottom: 1px solid black;
+  align-items: center;
+  padding-left: 1em;
+  z-index: 100;
+
+  p {
+    align-self: flex-end;
+    margin-left: 1em;
+  }
+
+  timer {
+    margin-left: 70%;
+  }
+
+  button {
+    margin: 5px;
+  }
+
+}
+
+#gamescreen {
+
+  // background: #5e5c51;
+  display: flex;
+  font-family: FredokaOne;
+  font-size: large;
+  width: 100%;
+  height: 100%;
+
+  ul {
+
+    color: white;
+    list-style: none;
+    border-right: 2px solid black;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    li {
+      padding: 1em;
+      width: 90%;
+      border: 2px solid black;
+      border-radius: 10px;
+      text-shadow: 2px 2px black;
+      background: #0090ed;
+      background: linear-gradient(180deg, #0090ed 0%, #00a8e3 100%);
+    }
+
+  }
+
+  submission {
+    align-self: center;
+    width: 40%;
+    margin-left: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    input {
+      background: #766133;
+      width: 70%;
+    }
+  }
+
+  word {
+    align-self: center;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15%;
+    margin-right: 30%;
+    font-size: xx-large;
+  }
+
+  players {
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    margin-top: 90px;
+    margin-left: 1em;
+
+    .customer {
+      background: $customer-color;
+    }
+
+    player {
+
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+      min-height: 66px;
+      color: black;
+      background: $primary-color;
+      border: 4px solid black;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 1em;
+
+      name-container {
+        width: 90%;
+        position: relative;
+        top: -15px;
+        display: flex;
+        flex-direction: row;
+        height: 44px;
+
+        name {
+          padding: 0 5px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          text-align: center;
+          line-height: 44px;
+          background: $primary-gradient;
+          vertical-align: middle;
+          border: 3px solid black;
+          display: inline-table;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      words {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        p {
+          margin: 5px 10px;
+          cursor: pointer;
+        }
+
+        .selected {
+          color: white;
+          text-shadow: 2px 2px black;
+        }
+      }
+
+      selected {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1em;
+
+        .timer {
+          color: #b32e2e;
+        }
+      }
+
+    }
+
+  }
+
+}
