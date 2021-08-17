@@ -78,8 +78,21 @@ value=votes they have
 
   addWordPair(req, words){
     //take user text input
+    //words is 1 string
+    //["a","b"]
+    let word = words[this.random(2)];
+    let wordpair = getSynonym(word,2);
     let username = req.session.scope.username;
     this.wordPairs.set(username, words);
+  }
+
+  getSynonym(word, count){
+    let words = [
+      {"word":"turd","score":94399,"tags":["syn","n"]},
+      {"word":"shit","score":93031,"tags":["syn","n"]},
+      {"word":"crap","score":91908,"tags":["syn","n"]}
+    ];
+    return words.slice(0,count);
   }
 
   selectWordPair(){
