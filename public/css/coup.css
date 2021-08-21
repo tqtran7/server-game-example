@@ -16,7 +16,7 @@ button {
   padding: 6px 12px;
   border: 1px solid black;
   border-radius: 12px;
-  background: linear-gradient(#7879ff 0%, #bfbfff 100%);
+  background: linear-gradient(#ede600 0%, #e37c00 100%);
 }
 
 .loginscreen {
@@ -26,7 +26,6 @@ button {
   width: 100%;
   height: 100%;
   border-right: 1px solid black;
-  background-color: #22373f;
 }
 .loginscreen login-form {
   color: white;
@@ -37,7 +36,7 @@ button {
 }
 .loginscreen login-form label {
   font-size: large;
-  color: #24b7b7;
+  color: #fee571;
 }
 .loginscreen login-form input {
   color: white;
@@ -59,7 +58,7 @@ navbar {
   width: 100%;
   height: 60px;
   display: flex;
-  background: #637c8a;
+  background: #a69674;
   border-bottom: 1px solid black;
   align-items: center;
   padding-left: 1em;
@@ -79,7 +78,6 @@ navbar button {
   font-size: large;
   width: 100%;
   height: 100%;
-  background-color: #22373f;
 }
 #gamescreen ul {
   color: white;
@@ -110,7 +108,7 @@ navbar button {
   margin-left: 1em;
 }
 #gamescreen players .customer {
-  background: #6d95ab;
+  background: #a6924e;
 }
 #gamescreen players player {
   display: flex;
@@ -118,7 +116,7 @@ navbar button {
   width: 200px;
   min-height: 210px;
   color: black;
-  background: #3838a1;
+  background: #a69674;
   border: 4px solid black;
   align-items: center;
   justify-content: flex-start;
@@ -140,7 +138,7 @@ navbar button {
   width: 100%;
   text-align: center;
   line-height: 44px;
-  background: linear-gradient(#7879ff 0%, #bfbfff 100%);
+  background: linear-gradient(#ede600 0%, #e37c00 100%);
   vertical-align: middle;
   border: 3px solid black;
   display: inline-table;
@@ -157,7 +155,7 @@ navbar button {
   cursor: pointer;
 }
 #gamescreen players player words .selected {
-  color: #9cc4ff;
+  color: white;
   text-shadow: 2px 2px black;
 }
 #gamescreen players player selected {
@@ -172,4 +170,4 @@ navbar button {
   color: #b32e2e;
 }
 
-/*# sourceMappingURL=snakeoil.css.map */
+/*# sourceMappingURL=coup.css.map */

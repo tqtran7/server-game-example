@@ -4,11 +4,11 @@
   src: url('../fonts/FredokaOne-Regular.ttf')
 }
 
-$primary-color: #575780;
-$customer-color: #6d95ab;
+$primary-color: #a69674;
+$customer-color: #a6924e;
 $background-color: #5e5c51;
 $input-color: #1f1b29;
-$primary-gradient: linear-gradient(rgb(120, 121, 255) 0%, rgb(191, 191, 255) 100%);
+$primary-gradient: linear-gradient(rgb(237, 230, 0) 0%, rgb(227, 124, 0) 100%);
 
 html {
   display: grid;
@@ -38,10 +38,9 @@ button {
   width: 100%;
   height: 100%;
   border-right: 1px solid black;
-  background-color: #22373f;
 
   login-form {
-
+    
     color: white;
     font-family: FredokaOne;
     display: flex;
@@ -51,7 +50,7 @@ button {
     label {
       font-size: large;
       // color: #0090ed;
-      color: #24b7b7;
+      color: #fee571;
     }
 
     input {
@@ -72,7 +71,7 @@ button {
     }
 
   }
-
+  
 }
 
 navbar {
@@ -81,7 +80,7 @@ navbar {
   width: 100%;
   height: 60px;
   display: flex;
-  background: #637c8a;
+  background: #a69674;
   border-bottom: 1px solid black;
   align-items: center;
   padding-left: 1em;
@@ -106,7 +105,6 @@ navbar {
   font-size: large;
   width: 100%;
   height: 100%;
-  background-color: #22373f;
 
   ul {
 
@@ -194,7 +192,7 @@ navbar {
         }
 
         .selected {
-          color: #9cc4ff;
+          color: white;
           text-shadow: 2px 2px black;
         }
       }
@@ -211,9 +209,9 @@ navbar {
           color: #b32e2e;
         }
       }
-
+      
     }
 
   }
-
+  
 }
