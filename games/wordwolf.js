@@ -90,10 +90,11 @@ value=votes they have
     let wordPair = await this.getSynonym(word, count);
     if(wordPair.length >= count)
     {
-      for(let x = wordPair.length - 1; x > 0; x--)
+      for(let x = wordPair.length - 2; x > 0; x--)
       {
         let snap = this.random(wordPair.length);
-        wordPair = wordPair.splice(snap, 1);
+        let gg = wordPair.splice(snap, 1);
+        wordPair = gg;
       }
       this.wordPairs.set(username, wordPair);
     }
