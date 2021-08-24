@@ -93,8 +93,7 @@ value=votes they have
       for(let x = wordPair.length - 2; x > 0; x--)
       {
         let snap = this.random(wordPair.length);
-        let gg = wordPair.splice(snap, 1);
-        wordPair = gg;
+        wordPair -= wordPair.splice(snap, 1);
       }
       this.wordPairs.set(username, wordPair);
     }
