@@ -1,5 +1,6 @@
 
 const socket = require('../middlewares/socket');
+const rp = require('request-promise');
 
 class WordWolf {
 
@@ -56,6 +57,7 @@ value=votes they have
     this.wordPairs = new Map();
     this.assignedCards = new Map();
     this.tallyMap = new Map();
+    this.players = [];
   }
 
   tally(req, player){
@@ -76,23 +78,34 @@ value=votes they have
     return Math.floor(Math.random() * n);
   }
 
-  addWordPair(req, words){
+  async addWordPair(req, words){
     //take user text input
     //words is 1 string
-    //["a","b"]
-    let word = words[this.random(2)];
-    let wordpair = getSynonym(word,2);
+    //["a","b"]\
+    const double = 2;
+    const count = 5;
     let username = req.session.scope.username;
-    this.wordPairs.set(username, words);
+    this.players.push(username);
+    let word = words[this.random(double)];
+    let wordPair = await this.getSynonym(word, count);
+    if(wordPair.length >= count)
+    {
+      for(let x = wordPair.length - 1; x > 0; x--)
+      {
+        let snap = this.random(wordPair.length);
+        wordPair = wordPair.splice(snap, 1);
+      }
+      this.wordPairs.set(username, wordPair);
+    }
   }
 
-  getSynonym(word, count){
-    let words = [
-      {"word":"turd","score":94399,"tags":["syn","n"]},
-      {"word":"shit","score":93031,"tags":["syn","n"]},
-      {"word":"crap","score":91908,"tags":["syn","n"]}
-    ];
-    return words.slice(0,count);
+  async getSynonym(word, count){
+    let options = {
+      uri: `https://api.datamuse.com/words?ml=${word}`,
+      json: true,
+    };
+    let words = await rp(options);
+    return words.slice(0, count).map(x => x.word);
   }
 
   selectWordPair(){
@@ -100,14 +113,16 @@ value=votes they have
     let usernames = Array.from(this.wordPairs.keys());
     let rand = this.random(usernames.length);
     let randUser = usernames[rand];
-    this.selectedWordPair = this.wordPairs.get(randUser);
+    if(this.wordPairs.get(randUser))
+    {
+      this.selectedWordPair = this.wordPairs.get(randUser);
+    }
   }
 
   selectWolf() {
     //randomly selects player and gives them the odd word out
-    let players = Array.from(this.wordPairs.keys());
-    let rand = this.random(players.length);
-    this.wolf = players[rand];
+    let rand = this.random(this.players.length);
+    this.wolf = this.players[rand];
   }
 
 // will addition start
